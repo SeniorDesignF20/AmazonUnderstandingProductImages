@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
 import os
 import cv2 
 import numpy as np
@@ -58,5 +54,5 @@ for filename in os.listdir(directory):
         angle = random.randint(0, 360)
         rotated_img = rotate(translated_img, angle)
         
-        cv2.imwrite('Manipulated/' + filename, rotated_img)
+        cv2.imwrite('Alignment/' + filename, rotated_img)
 
