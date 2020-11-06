@@ -38,21 +38,40 @@ def rotate(img, angle):
     # perform the actual rotation and return the image
     return cv2.warpAffine(img, M, (new_width, new_height), borderValue=(255,255,255))
 
+def detectWhitespace(img):
+    row, col = img.shape[:2]
+    
+    mean_top = cv2.mean(img[0, 0:col])
+    mean_bot = cv2.mean(img[row - 1, 0:col])
+    mean_left = cv2.mean(img[0:row, 0])
+    mean_right = cv2.mean(img[0:row, col - 1])
+    
+    print(mean_top, mean_bot, mean_left, mean_right)
+    
+    if mean_top[0] < 250.0 or mean_bot[0] < 250.0:
+        return False;
+    
+    if mean_right[0] < 250.0 or mean_left[0] < 250.0:
+        return False
+    
+    return True
+
 
 directory = r'Benign'
 for filename in os.listdir(directory):
     if filename.endswith('.jpg'):
         img_path = os.path.join(directory, filename)
         img = cv2.imread(img_path, cv2.IMREAD_COLOR)
-        
-        # translate image
-        random_x = random.randint(0, 200)
-        random_y = random.randint(0, 200)
-        translated_img = translate(img, random_x, random_y)
+        if(detectWhitespace(img)):
+            random_x = random.randint(0, 200)
+            random_y = random.randint(0, 200)
+            translated_img = translate(img, random_x, random_y)
 
-        # rotate translated image
-        angle = random.randint(0, 360)
-        rotated_img = rotate(translated_img, angle)
-        
-        cv2.imwrite('Alignment/' + filename, rotated_img)
+            angle = random.randint(0, 360)
+            rotated_img = rotate(translated_img, angle)
+
+            cv2.imwrite('Alignment/' + filename, rotated_img)
+            
+        else:
+            cv2.imwrite('Alignment/' + filename, img)
 
