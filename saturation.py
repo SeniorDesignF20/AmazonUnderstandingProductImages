@@ -8,7 +8,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.datasets import mnist
 
 #import dataset
-directory = r'Benign'
+directory = r'DataSets/TestSet/Benign'
 
 for filename in os.listdir(directory):
     if filename.endswith('.jpg'):
@@ -17,4 +17,4 @@ for filename in os.listdir(directory):
         saturated = np.array(tf.image.random_saturation(
             image, 0.25, 5, seed=None
         ))
-        cv2.imwrite('Saturated/' + filename, saturated)
+        cv2.imwrite('DataSets/TestSet/Saturated' + filename, saturated)

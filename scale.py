@@ -46,8 +46,8 @@ def random_newsize(image, zoom_ctr):
 
 
 
-directory = r'drive/My Drive/Colab Notebooks/Benign'
-to_directory = r'Scale/'
+directory = r'DataSets/TestSet/Benign'
+to_directory = r'DataSets/TestSet/Scale'
 for filename in os.listdir(directory):
   if filename.endswith('.jpg'):
     image_path = os.path.join(directory, filename)

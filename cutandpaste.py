@@ -33,9 +33,10 @@ def cutandpaste(im):
     return im
 
 
+
 random.seed()
-directory = r'Benign'
+directory = r'DataSets/TestSet/Benign'
 for filename in os.listdir(directory):
     im = Image.open(os.path.join(directory, filename))
     im = cutandpaste(im)
-    im.save(os.path.join(r'Manipulated', filename))
+    im.save(os.path.join(r'DataSets/TestSet/CutAndPaste', filename))

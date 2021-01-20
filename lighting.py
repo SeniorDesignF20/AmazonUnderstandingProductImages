@@ -103,8 +103,8 @@ def add_spot_light(image, light_position=None, max_brightness=255, min_brightnes
     frame[frame > 255] = 255
     frame = np.asarray(frame, dtype=np.uint8)
     return frame
-benign_directory = r'Benign\\'
-manipulated_directory = r"Lighting\\"
+benign_directory = r'DataSets/TestSet/Benign\\'
+manipulated_directory = r"DataSets/TestSet/Lighting\\"
 for filename in os.listdir(benign_directory):
     image = benign_directory + filename
     destination = manipulated_directory + filename

@@ -51,9 +51,9 @@ def multipleChannels(iamge):
     
 
 
-benign_directory = r'Benign\\'
-manipulated_directory1 = r"SingleChannel\\"
-manipulated_directory2 = r"MultipleChannels\\"
+benign_directory = r'DataSets/TestSet/Saturated'
+manipulated_directory1 = r"DataSets/TestSet/Sat+SingChan"
+manipulated_directory2 = r"DataSets/TestSet/Sat+MultiChan"
 for filename in os.listdir(benign_directory):
     image = benign_directory + filename
     destination = manipulated_directory1 + filename
