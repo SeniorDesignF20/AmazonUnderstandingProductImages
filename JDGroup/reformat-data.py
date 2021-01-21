@@ -81,8 +81,8 @@ for filename in os.listdir(directory):
     if filename.endswith('.jpg'):
         # path of image files
         img_path = os.path.join(directory, filename)
-        reformat(img_path, 416, 416)
+        reformat(img_path, 600, 600)
 
         cp_img_path = os.path.join(cp_directory, filename)
-        reformat_synthesized(cp_img_path, 416, 416)
+        reformat_synthesized(cp_img_path, 600, 600)
 
