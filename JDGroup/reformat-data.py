@@ -37,7 +37,7 @@ def reformat(img_path, target_width, target_height):
     destination = 'DataSet/'
     background.paste(image_resize, offset)
     
-    name = 'img' + str(count)
+    name = '{:05d}'.format(count)
     background.convert('RGB').save(destination + name + '.jpg', 'JPEG')
     print(name + ".jpg - image has been resized!")
 
@@ -68,7 +68,7 @@ def reformat_synthesized(img_path, target_width, target_height):
     destination = 'DataSetCP/'
     background.paste(image_resize, offset)
     
-    name = 'img' + str(count + 305)
+    name = '{:05d}'.format(count + 305)
     background.convert('RGB').save(destination + name + '.jpg', 'JPEG')
     print(name + ".jpg - c&p image has been resized!")
     count = count + 1
