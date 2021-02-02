@@ -8,7 +8,7 @@ import pandas as pd
 
 class Concatenator(Dataset):
 
-	def __init__(self, parent_dir, csvfile, image_dim=(600, 600)):
+	def __init__(self, parent_dir, csvfile, image_dim=(224, 224)):
 		self.concatenated_images = []
 		self.first_images = []
 		self.second_images = []

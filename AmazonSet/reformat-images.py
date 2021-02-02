@@ -84,8 +84,8 @@ def reformat_manipulated(img_path, dest_path, target_width, target_height):
 
 # change directory paths
 
-benign_src_path = r'TestSet/Benign'
-manipulated_src_path = r'TestSet/CutAndPaste'
+benign_src_path = r'TestSet/Benign_new'
+manipulated_src_path = r'TestSet/CutAndPaste_new'
 
 benign_dest_path = r'Benign'
 manipulated_dest_path = r'Manipulated'
