@@ -1,4 +1,5 @@
 import os
+import operator
 import numpy as np
 import torch
 import torch.nn as nn
@@ -8,6 +9,7 @@ from modified_alexnet import Modified_AlexNet
 import modified_vgg
 from Concatenator import Concatenator
 from pathlib import Path
+from Tensor_confusion_matrix import Tensor_confusion_matrix
 
 curr_path = os.path.dirname(os.path.abspath(__file__))
 datasets_path = str(Path(curr_path).parents[0]) +  "/AmazonSet"
@@ -20,30 +22,31 @@ print("Concatinating testing data")
 testing_concatenator = Concatenator(datasets_path, "test_expanded.csv")
 print("Finished")
 
+batch_size = 1
+
 print("Loading training set")
-batch_size = 64
 trainloader = DataLoader(training_concatenator, batch_size, shuffle=True)
 
 print("Loading testing set")
-batch_size = 64
 testloader = DataLoader(testing_concatenator, batch_size, shuffle=False)
 
 print("Creating Model")
-model = Modified_AlexNet()
+model = Modified_AlexNet(batch_size=batch_size)
 #model = modified_vgg.vgg11()
-print(model)
 
 print("Training Model")
 
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.000001)
 
-for epoch in range(3):
+for epoch in range(1):
 
 	running_loss = 0.0
 	for i, batch in enumerate(trainloader, 0):
+		print(f"Batch: {i}")
 
 		concat_images, labels = batch
+		print(torch.histc(concat_images))
 		optimizer.zero_grad()
 
 		outputs = model(concat_images)
@@ -61,6 +64,8 @@ print("Testing Model")
 correct = 0
 total = 0
 
+cm = (0,0,0,0)
+
 with torch.no_grad():
 	for data in testloader:
 		images, labels = data
@@ -69,7 +74,17 @@ with torch.no_grad():
 		total += labels.size(0)
 		correct += (predicted == labels).sum().item()
 
+		cm = tuple(map(operator.add, cm, Tensor_confusion_matrix(predicted, labels)))
+
+
 print(f"Accuracy over test set: {100*correct/total}%")
-print(correct)
-print(total)
+print()
+
+print("0=Different, 1=Same")
+print(f"True 0s = {cm[0]}, {cm[0]/2}%")
+print(f"True 1s = {cm[1]}, {cm[1]/2}%")
+print(f"False 0s = {cm[2]}, {cm[2]/2}%")
+print(f"False 1s = {cm[3]}, {cm[3]/2}%")
+
+
 
