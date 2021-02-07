@@ -8,11 +8,16 @@ import pandas as pd
 
 class Concatenator(Dataset):
 
-	def __init__(self, parent_dir, csvfile):
+	def __init__(self, parent_dir, csvfile, image_dim=(224, 224)):
 		self.concatenated_images = []
 		self.first_images = []
 		self.second_images = []
 		self.labels = []
+
+		self.transform = T.Compose([
+			T.ToPILImage(),
+			T.Resize(image_dim),
+			T.ToTensor()])
 
 		self.load(parent_dir, csvfile)
 
@@ -36,17 +41,6 @@ class Concatenator(Dataset):
 		label = self.labels[index]
 		return item, label
 
-	def transform(self, array):
-		new_array = np.copy(array)
-
-		new_array = new_array.astype(float)
-		new_array = new_array/255.0
-		tensor = torch.tensor(new_array)
-
-		return tensor
-
-
-
 	def create_folder(self, path):
 		if not os.path.isdir(path):
 			try:
@@ -58,25 +52,16 @@ class Concatenator(Dataset):
 				print(error)
 		else:
 			print(f"Folder @ {path} Already Exists")
-			#for file in os.listdir(path):
-				#os.remove(os.path.join(path, file))
+			"""
+			for file in os.listdir(path):
+				os.remove(os.path.join(path, file))
+				"""
 
 	def concat_name(self, dir_path, name1, name2):
 		name = name1 + '+' + name2
 		concat_path = os.path.join(dir_path, name)
 
 		return concat_path
-
-	def rand_order(self, name1, name2):
-		flag = False
-		if np.random.binomial(1, .5):
-			temp = name1
-			name1 = name2
-			name2 = temp
-			flag = True
-
-		return flag, name1, name2
-
 
 	def load(self, parent_dir, csvfile):
 
@@ -115,21 +100,25 @@ class Concatenator(Dataset):
 			else:
 				self.labels.append(0)
 
-			flag, name1, name2 = self.rand_order(name1, name2)
-
 			concat_name = self.concat_name(path3, name1[:-4], name2[:-4])
 			if not os.path.isdir(concat_name):
 				transformed1 = self.transform(image1)
 				transformed2 = self.transform(image2)
 
-				if flag:
-					concatenated = torch.cat((transformed2, transformed1), 0)
-				else:
-					concatenated = torch.cat((transformed1, transformed2), 0)
+				m1 = torch.mean(torch.flatten(transformed1))
+				m2 = torch.mean(torch.flatten(transformed2))
+
+				s1 = torch.std(torch.flatten(transformed1))
+				s2 = torch.std(torch.flatten(transformed2))
+
+				transformed1 = (transformed1 - m1)
+				transformed2 = (transformed2 - m2)
+
+				concatenated = torch.cat((transformed1, transformed2), 0)
 
 
 				self.concatenated_images.append(concatenated)
-				np.save(concat_name, concatenated)
+				#np.save(concat_name, concatenated)
 
 			else:
 				self.concatenated_image.append(np.load(concat_name))

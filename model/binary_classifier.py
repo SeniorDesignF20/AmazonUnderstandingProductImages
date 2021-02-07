@@ -22,7 +22,7 @@ print("Concatinating testing data")
 testing_concatenator = Concatenator(datasets_path, "test_expanded.csv")
 print("Finished")
 
-batch_size = 1
+batch_size = 64
 
 print("Loading training set")
 trainloader = DataLoader(training_concatenator, batch_size, shuffle=True)
@@ -46,7 +46,6 @@ for epoch in range(1):
 		print(f"Batch: {i}")
 
 		concat_images, labels = batch
-		print(torch.histc(concat_images))
 		optimizer.zero_grad()
 
 		outputs = model(concat_images)
