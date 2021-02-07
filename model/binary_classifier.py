@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torchvision
 from torch.utils.data import DataLoader
-from modified_alexnet import Modified_AlexNet
+from modified_lenet import Modified_LeNet
 import modified_vgg
 from Concatenator import Concatenator
 from pathlib import Path
@@ -31,8 +31,7 @@ print("Loading testing set")
 testloader = DataLoader(testing_concatenator, batch_size, shuffle=False)
 
 print("Creating Model")
-model = Modified_AlexNet(batch_size=batch_size)
-#model = modified_vgg.vgg11()
+model = Modified_LeNet(batch_size=batch_size)
 
 print("Training Model")
 
