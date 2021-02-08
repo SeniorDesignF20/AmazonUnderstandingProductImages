@@ -6,7 +6,6 @@ import torch.nn as nn
 import torchvision
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
-import modified_vgg
 from Concatenator import Concatenator
 from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
@@ -36,9 +35,9 @@ model = Modified_LeNet(batch_size=batch_size)
 print("Training Model")
 
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.000001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
-for epoch in range(1):
+for epoch in range(15):
 
 	running_loss = 0.0
 	for i, batch in enumerate(trainloader, 0):

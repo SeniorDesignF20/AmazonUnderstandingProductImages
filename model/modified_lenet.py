@@ -9,20 +9,20 @@ class Modified_LeNet(nn.Module):
 		num_channels = 6
 
 		self.features = nn.Sequential(
-			nn.Conv2d(in_channels=num_channels, out_channels=6*num_channels, kernel_size=5, stride=1),
+			nn.Conv2d(in_channels=num_channels, out_channels=batch_size, kernel_size=5, stride=1),
 			nn.Tanh(),
 			nn.AvgPool2d(kernel_size=2),
-			nn.Conv2d(in_channels=6*num_channels, out_channels=16*num_channels, kernel_size=5, stride=1),
+			nn.Conv2d(in_channels=batch_size, out_channels=3*batch_size, kernel_size=5, stride=1),
 			nn.Tanh(),
 			nn.AvgPool2d(kernel_size=2),
-			nn.Conv2d(in_channels=16*num_channels, out_channels=120*num_channels, kernel_size=5, stride=1),
+			nn.Conv2d(in_channels=3*batch_size, out_channels=6*batch_size, kernel_size=5, stride=1),
 			nn.Tanh()
 		)
 
 		self.classifier = nn.Sequential(
-			nn.Linear(in_features=120*num_channels, out_features=84*num_channels),
+			nn.Linear(in_features=6*batch_size * 7 * 7, out_features=4*batch_size),
 			nn.Tanh(),
-			nn.Linear(in_features=84*num_channels, out_features=num_classes)
+			nn.Linear(in_features=4*batch_size, out_features=num_classes)
 		)
 
 	def init_weights(self, layer):
@@ -31,7 +31,7 @@ class Modified_LeNet(nn.Module):
 			layer.bias.data.fill_(0.01)
 
 	def forward(self, x):
-		x = self.features()
+		x = self.features(x)
 		x = torch.flatten(x, 1)
 		x = self.classifier(x)
 		return x
