@@ -14,11 +14,11 @@ curr_path = os.path.dirname(os.path.abspath(__file__))
 datasets_path = str(Path(curr_path).parents[0]) +  "/AmazonSet"
 
 print("Concatinating training data")
-training_concatenator = Concatenator(datasets_path, "train_expanded.csv")
+training_concatenator = Concatenator(datasets_path, "train_expanded2.csv")
 print("Finished")
 
 print("Concatinating testing data")
-testing_concatenator = Concatenator(datasets_path, "test_expanded.csv")
+testing_concatenator = Concatenator(datasets_path, "test_expanded2.csv")
 print("Finished")
 
 batch_size = 64

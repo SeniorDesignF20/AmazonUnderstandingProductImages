@@ -5,6 +5,8 @@ import torchvision.transforms as T
 from torch.utils.data import Dataset
 from PIL import Image
 import pandas as pd
+import augmentation
+import cv2
 
 class Concatenator(Dataset):
 
@@ -92,6 +94,10 @@ class Concatenator(Dataset):
 			else:
 				image2 = np.asarray(Image.open(path2 + '/' + name2))
 
+			# create saturation/brightness differences (currently decreases accuracy)
+			#image2 = augmentation.saturation(image2)
+			#image2 = augmentation.add_spot_light(image2)
+	
 			self.first_images.append(image1)
 			self.second_images.append(image2)
 
