@@ -12,17 +12,17 @@ class Modified_LeNet(nn.Module):
 			nn.Conv2d(in_channels=num_channels, out_channels=batch_size, kernel_size=5, stride=1),
 			nn.Tanh(),
 			nn.AvgPool2d(kernel_size=2),
-			nn.Conv2d(in_channels=batch_size, out_channels=3*batch_size, kernel_size=5, stride=1),
+			nn.Conv2d(in_channels=batch_size, out_channels=batch_size, kernel_size=5, stride=1),
 			nn.Tanh(),
 			nn.AvgPool2d(kernel_size=2),
-			nn.Conv2d(in_channels=3*batch_size, out_channels=6*batch_size, kernel_size=5, stride=1),
+			nn.Conv2d(in_channels=batch_size, out_channels=batch_size, kernel_size=5, stride=1),
 			nn.Tanh()
 		)
 
 		self.classifier = nn.Sequential(
-			nn.Linear(in_features=6*batch_size * 7 * 7, out_features=4*batch_size),
+			nn.Linear(in_features=batch_size * 7 * 7, out_features=batch_size),
 			nn.Tanh(),
-			nn.Linear(in_features=4*batch_size, out_features=num_classes)
+			nn.Linear(in_features=batch_size, out_features=num_classes)
 		)
 
 	def init_weights(self, layer):
