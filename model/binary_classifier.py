@@ -37,7 +37,7 @@ print("Training Model")
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
-for epoch in range(30):
+for epoch in range(60):
 
 	running_loss = 0.0
 	for i, batch in enumerate(trainloader, 0):
