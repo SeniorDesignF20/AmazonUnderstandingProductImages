@@ -78,10 +78,10 @@ print(f"Accuracy over test set: {100*correct/total}%")
 print()
 
 print("0=Different, 1=Same")
-print(f"True 0s = {cm[0]}, {cm[0]/2}%")
-print(f"True 1s = {cm[1]}, {cm[1]/2}%")
-print(f"False 0s = {cm[2]}, {cm[2]/2}%")
-print(f"False 1s = {cm[3]}, {cm[3]/2}%")
+print(f"True 0s = {cm[0]}, {cm[0]*100/total}%")
+print(f"True 1s = {cm[1]}, {cm[1]*100/total}%")
+print(f"False 0s = {cm[2]}, {cm[2]*100/total}%")
+print(f"False 1s = {cm[3]}, {cm[3]*100/total}%")
 
 
 
