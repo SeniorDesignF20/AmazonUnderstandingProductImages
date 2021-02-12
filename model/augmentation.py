@@ -8,6 +8,7 @@ import torchvision
 import matplotlib.pyplot as plt
 import torchvision.transforms as T
 
+
 def cutandpaste(im):
     xsize, ysize = im.size
     xbox = int(xsize/4)
@@ -36,7 +37,8 @@ def cutandpaste(im):
     im.paste(region_border1, box1)
     im.paste(region_border2, box2)
     return im
-    
+
+
 def generate_spot_light_mask(mask_size,
                              position=None,
                              max_brightness=255,
@@ -60,7 +62,8 @@ def generate_spot_light_mask(mask_size,
                     minimum value could be smaller than given min_brightness.
     """
     if position is None:
-        position = [(random.randint(0, mask_size[0]), random.randint(0, mask_size[1]))]
+        position = [(random.randint(0, mask_size[0]),
+                     random.randint(0, mask_size[1]))]
     if linear_decay_rate is None:
         if mode == "linear_static":
             linear_decay_rate = random.uniform(0.25, 1)
@@ -70,7 +73,8 @@ def generate_spot_light_mask(mask_size,
     if mode == "gaussian":
         mu = np.sqrt(mask.shape[0]**2+mask.shape[1]**2)
         dev = mu / 3.5
-        mask = _decay_value_radically_norm_in_matrix(mask_size, position, max_brightness, min_brightness, dev)
+        mask = _decay_value_radically_norm_in_matrix(
+            mask_size, position, max_brightness, min_brightness, dev)
     mask = np.asarray(mask, dtype=np.uint8)
     # add median blur
     mask = cv2.medianBlur(mask, 5)
@@ -78,6 +82,7 @@ def generate_spot_light_mask(mask_size,
     # cv2.imshow("mask", mask)
     # cv2.waitKey(0)
     return mask
+
 
 def _decay_value_radically_norm_in_matrix(mask_size, centers, max_value, min_value, dev):
     """
@@ -97,6 +102,7 @@ def _decay_value_radically_norm_in_matrix(mask_size, centers, max_value, min_val
     mask[mask > 255] = 255
     return mask
 
+
 def _decay_value_radically_norm(x, centers, max_value, min_value, dev):
     """
     Calculate point value decayed from center following Gaussian decay. If multiple centers are given, value
@@ -111,6 +117,7 @@ def _decay_value_radically_norm(x, centers, max_value, min_value, dev):
     x_value = x_value_rate * (max_value - min_value) + min_value
     x_value = 255 if x_value > 255 else x_value
     return x_value
+
 
 def add_spot_light(image, light_position=None, max_brightness=255, min_brightness=0,
                    mode='gaussian', linear_decay_rate=None, transparency=None):
@@ -135,14 +142,16 @@ def add_spot_light(image, light_position=None, max_brightness=255, min_brightnes
     frame = np.asarray(frame, dtype=np.uint8)
     return frame
 
+
 def saturation(image):
     transform = T.Compose([
         T.ToPILImage(),
         T.ColorJitter(saturation=[0.25, 0.5])])
-    
+
     transformed = transform(image)
     transformed = cv2.cvtColor(np.array(transformed), cv2.COLOR_RGB2BGR)
 
     return transformed
+
 
 random.seed()
