@@ -57,16 +57,3 @@ def multipleChannels(im):
 
     return im
 
-
-# benign_directory = r'DataSets/TestSet/Saturated'
-# manipulated_directory1 = r"DataSets/TestSet/Sat+SingChan"
-# manipulated_directory2 = r"DataSets/TestSet/Sat+MultiChan"
-# for filename in os.listdir(benign_directory):
-#     image = benign_directory + filename
-#     destination = manipulated_directory1 + filename
-#     manipulated_image = singleChannel(image)
-#     cv2.imwrite(destination, manipulated_image)
-
-#     destination = manipulated_directory2 + filename
-#     manipulated_image = multipleChannels(image)
-#     cv2.imwrite(destination, manipulated_image)
