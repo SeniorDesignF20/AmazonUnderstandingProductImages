@@ -71,12 +71,15 @@ class Concatenator(Dataset):
         #second_dataset = "Manipulated"
         second_dataset = "rand_Manipulated"
 
-        path1 = os.path.join(parent_dir, first_dataset)
-        path2 = os.path.join(parent_dir, second_dataset)
+        #path1 = os.path.join(parent_dir, first_dataset)
+        #path2 = os.path.join(parent_dir, second_dataset)
+
+        path1 = parent_dir
+        path2 = parent_dir
 
         new_dir = str(first_dataset + '+' + second_dataset)
         path3 = os.path.join(parent_dir, new_dir)
-        self.create_folder(path3)
+        #self.create_folder(path3)
 
         csvpath = os.path.join(parent_dir, csvfile)
 
