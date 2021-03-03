@@ -20,9 +20,10 @@ with open('meta_AMAZON_FASHION.json') as f:
         data.append(json.loads(l.strip()))
 
 df = pd.DataFrame.from_dict(data)
-df.drop(df.columns.difference(["image", "asin"]), 1, inplace=True)
+df.drop(df.columns.difference(["image", "asin", "title"]), 1, inplace=True)
 
-df = df[df['image'].map(lambda d: len(d)) > 4]
+df = df[df['image'].map(lambda d: len(d)) > 1]
+df = df[df.title.str.contains("pant")]
 print(len(df))
 
 image_list = []
