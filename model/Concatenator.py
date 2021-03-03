@@ -71,12 +71,15 @@ class Concatenator(Dataset):
         #second_dataset = "Manipulated"
         second_dataset = "rand_Manipulated"
 
-        path1 = os.path.join(parent_dir, first_dataset)
-        path2 = os.path.join(parent_dir, second_dataset)
+        #path1 = os.path.join(parent_dir, first_dataset)
+        #path2 = os.path.join(parent_dir, second_dataset)
+
+        path1 = parent_dir
+        path2 = parent_dir
 
         new_dir = str(first_dataset + '+' + second_dataset)
         path3 = os.path.join(parent_dir, new_dir)
-        self.create_folder(path3)
+        #self.create_folder(path3)
 
         csvpath = os.path.join(parent_dir, csvfile)
 
@@ -85,14 +88,14 @@ class Concatenator(Dataset):
         for i in df.index:
 
             name1 = df["image1"][i]
-            image1 = np.asarray(Image.open(path1 + '/' + name1))
+            image1 = np.asarray(Image.open(os.path.join(path1, name1[3:])))
 
             name2 = df["image2"][i]
 
             if name2[0] == 'b':
-                image2 = np.asarray(Image.open(path1 + '/' + name2))
+                image2 = np.asarray(Image.open(os.path.join(path1, name2[3:])))
             else:
-                image2 = np.asarray(Image.open(path2 + '/' + name2))
+                image2 = np.asarray(Image.open(os.path.join(path2, name2[3:])))
 
             self.first_images.append(image1)
             self.second_images.append(image2)

@@ -11,16 +11,16 @@ from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
 
 curr_path = os.path.dirname(os.path.abspath(__file__))
-datasets_path = str(Path(curr_path).parents[0]) + "/AmazonSet"
+#datasets_path = str(Path(curr_path).parents[0]) + "/DataSets/multiimage_products"
+csv_path = str(Path(curr_path).parents[0]) + "/DataSets/multiimage_products"
+datasets_path = str(Path(curr_path).parents[0])
 
 print("Concatinating training data")
-#training_concatenator = Concatenator(datasets_path, "train_expanded2.csv")
-training_concatenator = Concatenator(datasets_path, "train_rand.csv")
+training_concatenator = Concatenator(datasets_path, os.path.join(csv_path, "train.csv"))
 print("Finished")
 
 print("Concatinating testing data")
-#testing_concatenator = Concatenator(datasets_path, "test_expanded2.csv")
-testing_concatenator = Concatenator(datasets_path, "test_rand.csv")
+testing_concatenator = Concatenator(datasets_path, os.path.join(csv_path, "test.csv"))
 print("Finished")
 
 batch_size = 64
@@ -39,7 +39,7 @@ print("Training Model")
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
-for epoch in range(60):
+for epoch in range(10):
 
     running_loss = 0.0
     for i, batch in enumerate(trainloader, 0):
