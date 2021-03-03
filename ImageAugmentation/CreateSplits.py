@@ -6,27 +6,42 @@ import numpy as np
 import pandas as pd
 import random
 
-def create_datasets(path1, path2, numsame=500, numdif=500):
+def create_datasets(dataset_path, numsame=500, numdif=500):
 
 	randDF = pd.DataFrame(columns=['image1', 'image2', 'label'])
 
 	for i in range(numsame):
-		image = random.choice(os.listdir(path1))
-		product_id = image[0:-4]
-
-		sameimage = str(product_id[0:10]) + '_' + str(random.randint(0, 10)) + '.jpg'
-
+		folder = random.choice(os.listdir(dataset_path))
+		while not os.path.isdir(os.path.join(dataset_path, folder)):
+			folder = random.choice(os.listdir(dataset_path))
+		folder = os.path.join(dataset_path, folder) # Folder = Number, e.g. 4
+		subfolder = random.choice(os.listdir(folder)) # Subfolder = product, e.g. A0123456789
 		count = 10
-		while not os.path.exists(path2 + '/' + sameimage) and count != 0:
-			sameimage = str(product_id[0:10]) + '_' + str(random.randint(0, 10)) + '.jpg'
-			
+		while len(os.listdir(os.path.join(folder, subfolder))) == 1 and count != 0:
+			subfolder = random.choice(os.listdir(folder)) # We want more than one picture for this product
+
 			count = count - 1
 
 		if count == 0:
 			continue
 
-		im1 = np.asarray(Image.open(path1 + '/' + image))
-		im2 = np.asarray(Image.open(path1 + '/' + sameimage))
+		image = random.choice(os.listdir(os.path.join(folder, subfolder)))
+		product_id = image[0:-4]
+
+		sameimage = str(product_id[0:10]) + '_' + str(random.randint(0, 10)) + '.jpg'
+
+		count = 10
+		while not os.path.exists(os.path.join(os.path.join(folder, subfolder), sameimage)) and count != 0:
+			sameimage = str(product_id[0:10]) + '_' + str(random.randint(0, 10)) + '.jpg'
+			
+			count = count - 1
+
+
+		if count == 0:
+			continue
+
+		im1 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder, image))))
+		im2 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder, sameimage))))
 
 		try:
 			if im1.shape[2] != 3 or im2.shape[2] !=3:
@@ -40,22 +55,28 @@ def create_datasets(path1, path2, numsame=500, numdif=500):
 		randDF = randDF.append(label, ignore_index=True)
 
 	for i in range(numdif):
-		image = random.choice(os.listdir(path1))
+		folder = random.choice(os.listdir(dataset_path))
+		while not os.path.isdir(os.path.join(dataset_path, folder)):
+			folder = random.choice(os.listdir(dataset_path))
+		folder = os.path.join(dataset_path, folder) # Folder = Number, e.g. 4
+		subfolder1 = random.choice(os.listdir(folder)) # Subfolder = product, e.g. A0123456789
+		image = random.choice(os.listdir(os.path.join(folder, subfolder1)))
 		product_id = image[0:-4]
 
-		diffimage = random.choice(os.listdir(path2))
-
+		subfolder2 = random.choice(os.listdir(folder))
 		count = 10
-		while diffimage[0:-4] == product_id and count != 0:
-			diffimage = random.choice(os.listdir(path2))
+		while subfolder1 == subfolder2 and count != 0:
+			subfolder2 = random.choice(os.listdir(folder))
 
 			count = count - 1
 
 		if count == 0:
 			continue
 
-		im1 = np.asarray(Image.open(path1 + '/' + image))
-		im2 = np.asarray(Image.open(path1 + '/' + diffimage))
+		diffimage = random.choice(os.listdir(os.path.join(folder, subfolder2)))
+
+		im1 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder1, image))))
+		im2 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder2, diffimage))))
 
 		try:
 			if im1.shape[2] != 3 or im2.shape[2] !=3:
@@ -88,23 +109,14 @@ def splitDF(df, destination_path, test_ratio=.2):
 
 	train.to_csv(destination_path + '/train.csv', index=False)
 	test.to_csv(destination_path + '/test.csv', index=False)
-
-def clearance(path):
-
-	for file in os.listdir(path):
-		if not file.endswith(".jpg"):
-			os.remove(os.path.join(path, file))
-
 	
 
 
-path1 = r'../DataSets/multiimage_products'
-path2 = r'../DataSets/multiimage_products'
+dataset_path = r'../DataSets/multiimage_products'
 
 destination_path = r'../DataSets/multiimage_products'
 
-clearance(path1)
-df = create_datasets(path1, path2, numsame=5000, numdif=5000)
+df = create_datasets(dataset_path, numsame=3000, numdif=3000)
 print("Datasets created")
 splitDF(df, destination_path)
 print("Datasets split and csvs are created")
