@@ -11,14 +11,16 @@ from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
 
 curr_path = os.path.dirname(os.path.abspath(__file__))
-datasets_path = str(Path(curr_path).parents[0]) + "/DataSets/multiimage_products"
+#datasets_path = str(Path(curr_path).parents[0]) + "/DataSets/multiimage_products"
+csv_path = str(Path(curr_path).parents[0]) + "/DataSets/multiimage_products"
+datasets_path = str(Path(curr_path).parents[0])
 
 print("Concatinating training data")
-training_concatenator = Concatenator(datasets_path, "train.csv")
+training_concatenator = Concatenator(datasets_path, os.path.join(csv_path, "train.csv"))
 print("Finished")
 
 print("Concatinating testing data")
-testing_concatenator = Concatenator(datasets_path, "test.csv")
+testing_concatenator = Concatenator(datasets_path, os.path.join(csv_path, "test.csv"))
 print("Finished")
 
 batch_size = 64

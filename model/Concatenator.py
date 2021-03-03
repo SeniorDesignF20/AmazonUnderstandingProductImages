@@ -88,14 +88,14 @@ class Concatenator(Dataset):
         for i in df.index:
 
             name1 = df["image1"][i]
-            image1 = np.asarray(Image.open(path1 + '/' + name1))
+            image1 = np.asarray(Image.open(os.path.join(path1, name1[3:])))
 
             name2 = df["image2"][i]
 
             if name2[0] == 'b':
-                image2 = np.asarray(Image.open(path1 + '/' + name2))
+                image2 = np.asarray(Image.open(os.path.join(path1, name2[3:])))
             else:
-                image2 = np.asarray(Image.open(path2 + '/' + name2))
+                image2 = np.asarray(Image.open(os.path.join(path2, name2[3:])))
 
             self.first_images.append(image1)
             self.second_images.append(image2)
