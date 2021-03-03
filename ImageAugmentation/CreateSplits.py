@@ -40,8 +40,10 @@ def create_datasets(dataset_path, numsame=500, numdif=500):
 		if count == 0:
 			continue
 
-		im1 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder, image))))
-		im2 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder, sameimage))))
+		image = os.path.join(folder, os.path.join(subfolder, image))
+		sameimage = os.path.join(folder, os.path.join(subfolder, sameimage))
+		im1 = np.asarray(Image.open(image))
+		im2 = np.asarray(Image.open(sameimage))
 
 		try:
 			if im1.shape[2] != 3 or im2.shape[2] !=3:
@@ -75,8 +77,11 @@ def create_datasets(dataset_path, numsame=500, numdif=500):
 
 		diffimage = random.choice(os.listdir(os.path.join(folder, subfolder2)))
 
-		im1 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder1, image))))
-		im2 = np.asarray(Image.open(os.path.join(folder, os.path.join(subfolder2, diffimage))))
+		image = os.path.join(folder, os.path.join(subfolder1, image))
+		diffimage = os.path.join(folder, os.path.join(subfolder2, diffimage))
+
+		im1 = np.asarray(Image.open(image))
+		im2 = np.asarray(Image.open(diffimage))
 
 		try:
 			if im1.shape[2] != 3 or im2.shape[2] !=3:
