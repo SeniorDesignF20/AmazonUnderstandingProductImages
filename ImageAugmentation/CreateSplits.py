@@ -11,6 +11,7 @@ def create_datasets(dataset_path, numsame=500, numdif=500):
 	randDF = pd.DataFrame(columns=['image1', 'image2', 'label'])
 
 	for i in range(numsame):
+		print(i)
 		folder = random.choice(os.listdir(dataset_path))
 		while not os.path.isdir(os.path.join(dataset_path, folder)):
 			folder = random.choice(os.listdir(dataset_path))
@@ -42,10 +43,10 @@ def create_datasets(dataset_path, numsame=500, numdif=500):
 
 		image = os.path.join(folder, os.path.join(subfolder, image))
 		sameimage = os.path.join(folder, os.path.join(subfolder, sameimage))
-		im1 = np.asarray(Image.open(image))
-		im2 = np.asarray(Image.open(sameimage))
 
 		try:
+			im1 = np.asarray(Image.open(image))
+			im2 = np.asarray(Image.open(sameimage))
 			if im1.shape[2] != 3 or im2.shape[2] !=3:
 				print(":(")
 				continue
@@ -57,6 +58,7 @@ def create_datasets(dataset_path, numsame=500, numdif=500):
 		randDF = randDF.append(label, ignore_index=True)
 
 	for i in range(numdif):
+		print(i)
 		folder = random.choice(os.listdir(dataset_path))
 		while not os.path.isdir(os.path.join(dataset_path, folder)):
 			folder = random.choice(os.listdir(dataset_path))
@@ -80,10 +82,9 @@ def create_datasets(dataset_path, numsame=500, numdif=500):
 		image = os.path.join(folder, os.path.join(subfolder1, image))
 		diffimage = os.path.join(folder, os.path.join(subfolder2, diffimage))
 
-		im1 = np.asarray(Image.open(image))
-		im2 = np.asarray(Image.open(diffimage))
-
 		try:
+			im1 = np.asarray(Image.open(image))
+			im2 = np.asarray(Image.open(diffimage))
 			if im1.shape[2] != 3 or im2.shape[2] !=3:
 				print(":(")
 				continue
@@ -96,7 +97,7 @@ def create_datasets(dataset_path, numsame=500, numdif=500):
 
 	return randDF
 
-def splitDF(df, destination_path, test_ratio=.2):
+def splitDF(df, destination_path, test_ratio=.25):
 	different_images = df.loc[df['label'] == 'different']
 	same_images = df.loc[df['label'] == 'same']
 
@@ -117,11 +118,11 @@ def splitDF(df, destination_path, test_ratio=.2):
 	
 
 
-dataset_path = r'../DataSets/multiimage_products'
+dataset_path = r'../DataSets'
 
-destination_path = r'../DataSets/multiimage_products'
+destination_path = r'../DataSets'
 
-df = create_datasets(dataset_path, numsame=3000, numdif=3000)
+df = create_datasets(dataset_path, numsame=4, numdif=4)
 print("Datasets created")
 splitDF(df, destination_path)
 print("Datasets split and csvs are created")

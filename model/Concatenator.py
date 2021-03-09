@@ -15,6 +15,7 @@ class Concatenator(Dataset):
         self.first_images = []
         self.second_images = []
         self.labels = []
+        self.image_dim = image_dim
 
         self.transform = T.Compose([
             T.ToPILImage(),
@@ -34,6 +35,9 @@ class Concatenator(Dataset):
 
     def labels(self):
         return self.labels
+
+    def image_dim(self):
+        return self.image_dim
 
     def __len__(self):
         return len(self.concatenated_images)
@@ -55,9 +59,9 @@ class Concatenator(Dataset):
         else:
             print(f"Folder @ {path} Already Exists")
             """
-			for file in os.listdir(path):
-				os.remove(os.path.join(path, file))
-				"""
+            for file in os.listdir(path):
+                os.remove(os.path.join(path, file))
+                """
 
     def concat_name(self, dir_path, name1, name2):
         name = name1 + '+' + name2
@@ -86,6 +90,8 @@ class Concatenator(Dataset):
         df = pd.read_csv(csvpath)
 
         for i in df.index:
+
+            print(i)
 
             name1 = df["image1"][i]
             image1 = np.asarray(Image.open(os.path.join(path1, name1[3:])))
