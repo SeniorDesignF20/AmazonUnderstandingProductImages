@@ -4,15 +4,14 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchvision
+import csv
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
-#from plot_examples import plot_examples
 
 curr_path = os.path.dirname(os.path.abspath(__file__))
-#datasets_path = str(Path(curr_path).parents[0]) + "/DataSets/multiimage_products"
 csv_path = str(Path(curr_path).parents[0]) + "/DataSets"
 datasets_path = str(Path(curr_path).parents[0])
 
@@ -71,21 +70,26 @@ total = 0
 
 cm = (0, 0, 0, 0)
 
-test_images = []
 cm_labels = []
+
+reverse_legend = {
+        0: "True0",
+        1: "True1",
+        2: "False0",
+        3: "False1"
+    }
 
 with torch.no_grad():
     for data in testloader:
         images, labels = data
-        test_images.append(images)
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
         matrix, matrix_labels = Tensor_confusion_matrix(predicted, labels)
-        cm_labels.append(matrix_labels)
-
+        for i in matrix_labels:
+            cm_labels.append([reverse_legend[i]])
         cm = tuple(
             map(operator.add, cm, matrix))
 
@@ -99,4 +103,7 @@ print(f"True 1s = {cm[1]}, {cm[1]*100/total}%")
 print(f"False 0s = {cm[2]}, {cm[2]*100/total}%")
 print(f"False 1s = {cm[3]}, {cm[3]*100/total}%")
 
-#plot_examples(test_images, cm_labels)
+file = open('cm_labels.csv', 'w+', newline='')
+with file:
+    write = csv.writer(file)
+    write.writerows(cm_labels)
