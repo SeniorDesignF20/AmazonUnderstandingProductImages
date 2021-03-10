@@ -8,10 +8,10 @@ import shutil
 from PIL import Image, ImageOps
 
 
-###load duplicate id's
-#duplicates = []
-#my_file = open("DataSets/duplicates.txt", "r")
-#duplicates = my_file.readlines()
+#load duplicate id's
+# duplicates = []
+# my_file = open("duplicates.txt", "r")
+# duplicates = my_file.readlines()
 
 ### load the meta data
 data = []
@@ -22,8 +22,15 @@ with open('meta_AMAZON_FASHION.json') as f:
 df = pd.DataFrame.from_dict(data)
 df.drop(df.columns.difference(["image", "asin", "title"]), 1, inplace=True)
 
+# for line in duplicates:
+#     ids = line.split()
+#     for id in ids[1:]:
+#         if id in df.asin:
+#             df.drop(df.loc[df['asin']== id].index, inplace=True)
+#             print(len(df))
+
 df = df[df['image'].map(lambda d: len(d)) > 1]
-df = df[df.title.str.contains("pant")]
+df = df[df.title.str.contains("glass")]
 print(len(df))
 
 image_list = []
