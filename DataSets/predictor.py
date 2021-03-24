@@ -4,11 +4,9 @@ import os
 
 predictor = ImageClassification()
 
-#model_path = "./models/mobilenet_v2.h5"
-#model_path = "./models/resnet50_imagenet_tf.2.0.h5"
-model_path = "./models/inception_v3_weights_tf_dim_ordering_tf_kernels.h5"
-input_path = "./Jeans"
-output_path = "./Jeans_Clean"
+#model_path = "./classifier_models/mobilenet_v2.h5"
+#model_path = "./classifier_models/resnet50_imagenet_tf.2.0.h5"
+model_path = "./classifier_models/inception_v3_weights_tf_dim_ordering_tf_kernels.h5"
 
 #predictor.setModelTypeAsMobileNetV2()
 #predictor.setModelTypeAsResNet50()
@@ -18,103 +16,213 @@ predictor.loadModel()
 
 def clean_jeans(predictor):
     input_path = "./Jeans"
-    output_path = "./Jeans_Clean"
 
     jean_objects = ["jean", "stole", "swimming_trunks", "miniskirt"]
 
     for img in os.listdir(input_path):
         if img.endswith(".jpg"):
             img_path = os.path.join(input_path, img)
-            img_out_path = os.path.join(output_path, img)
 
             predictions, probabilities = predictor.classifyImage(img_path, result_count=1)
             
             if (predictions[0] in jean_objects):
                 print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
-            
-            if (predictions[1] in jean_objects):
+            elif (predictions[1] in jean_objects):
                 print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
+            else:
+                os.remove(img_path)
 
 def clean_glasses(predictor):
     input_path = "./Glasses"
-    output_path = "./Glasses_Clean"
 
-    glasses_objects = ["sunglasses", "sunglass", "hook", "loupe"]
+    glasses_objects = ["sunglasses", "sunglass", "loupe"]
 
     for img in os.listdir(input_path):
         if img.endswith(".jpg"):
             img_path = os.path.join(input_path, img)
-            img_out_path = os.path.join(output_path, img)
 
             predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
             
             if (predictions[0] in glasses_objects):
                 print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
-            
-            if (predictions[1] in glasses_objects):
+            elif (predictions[1] in glasses_objects):
                 print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
+            else:
+                os.remove(img_path)
+
 
 def clean_dresses(predictor):
     input_path = "./Dresses"
-    output_path = "./Dresses_Clean"
 
     dresses_objects = ["gown", "miniskirt", "overskirt", "sarong", "kimono", "hoopskirt", "vestment"]
 
     for img in os.listdir(input_path):
         if img.endswith(".jpg"):
             img_path = os.path.join(input_path, img)
-            img_out_path = os.path.join(output_path, img)
 
             predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
            
             if (predictions[0] in dresses_objects):
-                print("keeping", img, "= ", predictions[0] , ":" , probabilities[0])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
-            
-            if (predictions[1] in dresses_objects):
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in dresses_objects):
                 print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
+            else:
+                os.remove(img_path) 
 
 
 def clean_bags(predictor):
     input_path = "./Bags"
-    output_path = "./Bags_Clean"
 
-    bags_objects = []
+    bags_objects = ["purse", "wallet", "carpenter's_kit", "backpack", "mailbag", "shopping_basket"]
 
     for img in os.listdir(input_path):
         if img.endswith(".jpg"):
             img_path = os.path.join(input_path, img)
-            img_out_path = os.path.join(output_path, img)
 
             predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
-            print(img, predictions)
             
-            '''
             if (predictions[0] in bags_objects):
-                print("keeping", img, "= ", predictions[0] , ":" , probabilities[0])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in bags_objects):
+                print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
+            else:
+                os.remove(img_path)
             
-            if (predictions[1] in bags_objects):
-                print("keeping ", img, "=", predictions[1] , ":" , probabilities[1])
-                image = cv2.imread(img_path)
-                cv2.imwrite(img_out_path, image) 
-            '''
+
+def clean_shirts(predictor):
+    input_path = "./Shirts"
+
+    shirts_objects = ["jersey", "sweatshirt", "bib", "cardigan", "pajama", "apron", "poncho", "trench_coat"]
+
+    for img in os.listdir(input_path):
+        if img.endswith(".jpg"):
+            img_path = os.path.join(input_path, img)
+
+            predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
+
+            if (predictions[0] in shirts_objects):
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in shirts_objects):
+                print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
+            else:
+                os.remove(img_path)
+
+
+def clean_pants(predictor):
+    input_path = "./Pants"
+
+    pants_objects = ["jean", "swimming_trunks", "suit", "pajama", "bikini", "miniskirt"]
+
+    for img in os.listdir(input_path):
+        if img.endswith(".jpg"):
+            img_path = os.path.join(input_path, img)
+
+            predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
+
+            if (predictions[0] in pants_objects):
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in pants_objects):
+                print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
+            else:
+                os.remove(img_path)
+
+
+def clean_sweaters(predictor):
+    input_path = "./Sweaters"
+
+    sweaters_objects = ["sweatshirt", "cardigan", "stole", "cloak", "poncho", "jersey", "trench_coat", "kimono"]
+
+    for img in os.listdir(input_path):
+        if img.endswith(".jpg"):
+            img_path = os.path.join(input_path, img)
+
+            predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
             
-clean_dresses(predictor)
+            if (predictions[0] in sweaters_objects):
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in sweaters_objects):
+                print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
+            else:
+                os.remove(img_path)
 
-    
 
-    
-    
+def clean_wallet(predictor):
+    input_path = "./Wallet"
+
+    wallet_objects = ["wallet", "purse"]
+
+    for img in os.listdir(input_path):
+        if img.endswith(".jpg"):
+            img_path = os.path.join(input_path, img)
+
+            predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
+            
+            if (predictions[0] in wallet_objects):
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in wallet_objects):
+                print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
+            else:
+                os.remove(img_path)
+
+
+def clean_underwear(predictor):
+    input_path = "./Underwear"
+
+    underwear_objects = ["bikini", "bathing_cap", "swimming_trunks", "brassiere", "diaper"]
+
+    for img in os.listdir(input_path):
+        if img.endswith(".jpg"):
+            img_path = os.path.join(input_path, img)
+
+            predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
+           
+            if (predictions[0] in underwear_objects):
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in underwear_objects):
+                print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
+            else:
+                os.remove(img_path)
+ 
+
+def clean_socks(predictor):
+    input_path = "./Socks"
+
+    socks_objects = ["sock"]
+
+    for img in os.listdir(input_path):
+        if img.endswith(".jpg"):
+            img_path = os.path.join(input_path, img)
+
+            predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
+
+            if (predictions[0] in socks_objects):
+                print("keeping", img, "=", predictions[0] , ":" , probabilities[0])
+            elif (predictions[1] in socks_objects):
+                print("keeping", img, "=", predictions[1] , ":" , probabilities[1])
+            else:
+                os.remove(img_path)
+
+
+def clean_belts(predictor):
+    input_path = "./Belts"
+
+    #belts_objects = []
+    not_belts_objects = ["web_site", "menu", "comic_book", "street_sign"]
+
+    for img in os.listdir(input_path):
+        if img.endswith(".jpg"):
+            img_path = os.path.join(input_path, img)
+            try:
+                predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
+                
+                if (predictions[0] in not_belts_objects):
+                    os.remove(img_path)
+                elif (predictions[1] in not_belts_objects):
+                    os.remove(img_path)
+                else:
+                    print("keeping", img, "=", predictions)
+            except:
+                continue
+
+print("Cleaning Belts Dataset ...")
+clean_belts(predictor)
