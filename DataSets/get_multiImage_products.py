@@ -5,6 +5,8 @@ import pandas as pd
 import urllib.request
 import requests
 import shutil
+import classifier
+from imageai.Classification import ImageClassification
 from PIL import Image, ImageOps
 
 '''
@@ -72,13 +74,21 @@ for index, row in df.head(1000).iterrows():
         except: 
             pass
 '''
+### Set up image classifier
+predictor = ImageClassification()
 
-json_path = r"preprocessed_meta_Clothing_Shoes_and_Jewelry_20000.json"
+model_path = "./classifier_models/inception_v3_weights_tf_dim_ordering_tf_kernels.h5"
+predictor.setModelTypeAsInceptionV3()
+predictor.setModelPath(model_path)
+predictor.loadModel()
+
+### Load preprocessed metadata
+json_path = r"../AmazonSet/preprocessed_meta_Clothing_Shoes_and_Jewelry_20000.json"
 df = pd.read_json(json_path)
 
 print("Finding image products ...")
 
-for index, row in df.iterrows():
+for index, row in df[13000:15000].iterrows():
 
     asin = row["asin"]
     image_list = row["image"]
@@ -119,16 +129,16 @@ for index, row in df.iterrows():
         class_path = "./Backpacks"
     elif any(x in row["category"] for x in hat_objs):
         class_path = "./Hats"
-    elif any(x in row["category"] for x in shoe_objs):
-        class_path = "./Shoes"
+    #elif any(x in row["category"] for x in shoe_objs):
+    #    class_path = "./Shoes"
     elif any(x in row["category"] for x in jewelry_objs):
         class_path = "./Jewelry"
-    elif any(x in row["category"] for x in top_objs):
-        class_path = "./Shirts"
+    #elif any(x in row["category"] for x in top_objs):
+    #    class_path = "./Shirts"
     elif any(x in row["category"] for x in blouse_objs):
         class_path = "./Blouses"
-    elif any(x in row["category"] for x in pant_objs):
-        class_path = "./Pants"
+    #elif any(x in row["category"] for x in pant_objs):
+    #    class_path = "./Pants"
     elif any(x in row["category"] for x in watch_objs):
         class_path = "./Watches"
     elif any(x in row["category"] for x in jacket_objs):
@@ -170,7 +180,7 @@ for index, row in df.iterrows():
     elif any(x in row["category"] for x in accessories_objs):
         class_path = "./Accessories" 
     else:
-        print(index, "Category not found.")
+        print(index, "Category not found.", row["category"])
         continue
 
     for i in range(len(image_list)):
@@ -191,6 +201,10 @@ for index, row in df.iterrows():
         try:
             urllib.request.urlretrieve(image_url, output_path)
             print(index, 'Image successfully downloaded to:', output_path)
+
+            # Check if product image contains an object
+            classifier.check_object(predictor, output_path)
+
         except:
             pass
 

@@ -225,32 +225,14 @@ def remove_nonobjects(predictor, class_path):
             except:
                 pass
 
+def check_object(predictor, img_path):
+    non_objects = ["web_site", "menu", "comic_book", "street_sign"]
+    predictions, probabilities = predictor.classifyImage(img_path, result_count=2)
+    if (predictions[0] in non_objects):
+        print("Removing", img, "=", predictions)
+        os.remove(img_path)
+    elif (predictions[1] in non_objects):
+        print("Removing", img, "=", predictions)
+        os.remove(img_path)
 
-print("Removing non-objects from set ...")
-remove_nonobjects(predictor, "./Accessories")
-remove_nonobjects(predictor, "./Backpacks")
-remove_nonobjects(predictor, "./Bags")
-remove_nonobjects(predictor, "./Belts")
-remove_nonobjects(predictor, "./Blouses")
-remove_nonobjects(predictor, "./Dresses")
-remove_nonobjects(predictor, "./Glasses")
-remove_nonobjects(predictor, "./Gloves")
-remove_nonobjects(predictor, "./Hats")
-remove_nonobjects(predictor, "./Jackets")
-remove_nonobjects(predictor, "./Jeans")
-remove_nonobjects(predictor, "./Jewelry")
-remove_nonobjects(predictor, "./Luggages")
-remove_nonobjects(predictor, "./Neckties")
-remove_nonobjects(predictor, "./Pants")
-remove_nonobjects(predictor, "./Scarves")
-remove_nonobjects(predictor, "./Shirts")
-remove_nonobjects(predictor, "./Shoes")
-remove_nonobjects(predictor, "./Shorts")
-remove_nonobjects(predictor, "./Sleepwear")
-remove_nonobjects(predictor, "./Socks")
-remove_nonobjects(predictor, "./Suits")
-remove_nonobjects(predictor, "./Sweaters")
-remove_nonobjects(predictor, "./Umbrellas")
-remove_nonobjects(predictor, "./Underwear")
-remove_nonobjects(predictor, "./Wallets")
-remove_nonobjects(predictor, "./Watches")
+
