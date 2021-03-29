@@ -5,12 +5,12 @@ import re
 import numpy as np
 import pandas as pd
 import random
-from ClassSpliter import ClassSpliter
+from ClassSplitter import ClassSplitter
 
 def create_datasets(dataset_path, numsame=500, numdif=500, size='small'):
 
 	randDF = pd.DataFrame(columns=['image1', 'image2', 'label'])
-	classes = ClassSpliter(dataset_path, size)
+	classes = ClassSplitter(dataset_path, size)
 
 	for i in range(numsame):
 		print(i)
