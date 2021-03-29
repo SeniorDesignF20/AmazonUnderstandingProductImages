@@ -39,6 +39,7 @@ def bundle(path):
 cwd = os.getcwd()
 exceptions = ['classifier_models', 'duplicate ids', '256_Object']
 
+# Call this file when datasets are updated
 for folder in os.listdir(cwd):
 	if folder not in exceptions and os.path.isdir(os.path.join(cwd, folder)):
 		print(folder)
@@ -46,3 +47,4 @@ for folder in os.listdir(cwd):
 		moveup(path)
 		deleteEmptyFolders(path)
 		bundle(path)
+print("Finished Sorting")
