@@ -18,5 +18,5 @@ def bundle(path):
 
 			os.rename(os.path.join(path, file), os.path.join(os.path.join(path, product_id), file))
 
-path = os.path.join(os.getcwd(), 'Belts')
-bundle(path)
+#path = os.path.join(os.getcwd(), 'Belts')
+#bundle(path)

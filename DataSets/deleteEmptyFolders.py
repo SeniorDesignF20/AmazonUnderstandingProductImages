@@ -1,8 +1,8 @@
 import os
 import shutil
 
-def deleteEmptyFolders():
-	cwd = os.getcwd()
+def deleteEmptyFolders(path):
+	cwd = path
 
 	for folder in os.listdir(cwd):
 		if os.path.isdir(folder):
