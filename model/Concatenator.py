@@ -10,7 +10,7 @@ import cv2
 
 class Concatenator(Dataset):
 
-    def __init__(self, parent_dir, csvfile, image_dim=(56, 56)):
+    def __init__(self, csvfile, image_dim=(56, 56)):
         self.concatenated_images = []
         self.first_images = []
         self.second_images = []
@@ -22,7 +22,7 @@ class Concatenator(Dataset):
             T.Resize(image_dim),
             T.ToTensor()])
 
-        self.load(parent_dir, csvfile)
+        self.load(csvfile)
 
     def first_images(self):
         return self.first_images
@@ -47,63 +47,21 @@ class Concatenator(Dataset):
         label = self.labels[index]
         return item, label
 
-    def create_folder(self, path):
-        if not os.path.isdir(path):
-            try:
-                os.makedirs(path)
-                print(f"Created Folder @ {path}")
+    def load(self, csvfile):
+        # This code is ugly lmao I'll clean it eventually
 
-            except OSError as error:
-                print("Folder cannot be created")
-                print(error)
-        else:
-            print(f"Folder @ {path} Already Exists")
-            """
-            for file in os.listdir(path):
-                os.remove(os.path.join(path, file))
-                """
-
-    def concat_name(self, dir_path, name1, name2):
-        name = name1 + '+' + name2
-        concat_path = os.path.join(dir_path, name)
-
-        return concat_path
-
-    def load(self, parent_dir, csvfile):
-
-        first_dataset = "Benign"
-        #second_dataset = "Manipulated"
-        second_dataset = "rand_Manipulated"
-
-        #path1 = os.path.join(parent_dir, first_dataset)
-        #path2 = os.path.join(parent_dir, second_dataset)
-
-        path1 = parent_dir
-        path2 = parent_dir
-
-        new_dir = str(first_dataset + '+' + second_dataset)
-        path3 = os.path.join(parent_dir, new_dir)
-        #self.create_folder(path3)
-
-        csvpath = os.path.join(parent_dir, csvfile)
-
-        df = pd.read_csv(csvpath)
+        df = pd.read_csv(csvfile)
 
         for i in df.index:
 
             print(i)
 
             name1 = df["image1"][i]
-            image1 = np.asarray(Image.open(os.path.join(path1, name1[3:])))
+            image1 = np.asarray(Image.open(name1))
+            self.first_images.append(image1)
 
             name2 = df["image2"][i]
-
-            if name2[0] == 'b':
-                image2 = np.asarray(Image.open(os.path.join(path1, name2[3:])))
-            else:
-                image2 = np.asarray(Image.open(os.path.join(path2, name2[3:])))
-
-            self.first_images.append(image1)
+            image2 = np.asarray(Image.open(name2))
             self.second_images.append(image2)
 
             if df["label"][i] == "same":
@@ -111,24 +69,19 @@ class Concatenator(Dataset):
             else:
                 self.labels.append(0)
 
-            concat_name = self.concat_name(path3, name1[:-4], name2[:-4])
-            if not os.path.isdir(concat_name):
-                transformed1 = self.transform(image1)
-                transformed2 = self.transform(image2)
+            
+            transformed1 = self.transform(image1)
+            transformed2 = self.transform(image2)
 
-                m1 = torch.mean(torch.flatten(transformed1))
-                m2 = torch.mean(torch.flatten(transformed2))
+            m1 = torch.mean(torch.flatten(transformed1))
+            m2 = torch.mean(torch.flatten(transformed2))
 
-                s1 = torch.std(torch.flatten(transformed1))
-                s2 = torch.std(torch.flatten(transformed2))
+            s1 = torch.std(torch.flatten(transformed1))
+            s2 = torch.std(torch.flatten(transformed2))
 
-                transformed1 = (transformed1 - m1)
-                transformed2 = (transformed2 - m2)
+            transformed1 = (transformed1 - m1)
+            transformed2 = (transformed2 - m2)
 
-                concatenated = torch.cat((transformed1, transformed2), 0)
+            concatenated = torch.cat((transformed1, transformed2), 0)
 
-                self.concatenated_images.append(concatenated)
-                #np.save(concat_name, concatenated)
-
-            else:
-                self.concatenated_image.append(np.load(concat_name))
+            self.concatenated_images.append(concatenated)

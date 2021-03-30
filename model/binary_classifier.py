@@ -5,6 +5,8 @@ import torch
 import torch.nn as nn
 import torchvision
 import csv
+import sys
+from CreateSplits import create_datasets, splitDF
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
@@ -12,17 +14,46 @@ from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
 
 curr_path = os.path.dirname(os.path.abspath(__file__))
-csv_path = str(Path(curr_path).parents[0]) + "/DataSets"
-datasets_path = str(Path(curr_path).parents[0])
+datasets_path = str(Path(curr_path).parents[0]) + '/Datasets'
+print(datasets_path)
 
-image_dim = (150,150)
+"""
+ Call binary_classifier.py using the following format:
+ python3 binary_classifier.py dataset_size image_dim epochs numsame numdif
+ where
+
+dataset_size is 'small', 'medium', or 'large'
+image_dim is dimension of images when inserted into model (assumes square). Examples: 26->(26,26), 64->(64,64), 150->(150,150)
+epochs is number of training epochs (default 30)
+numsame is number of same examples across training and testing set (default 2000)
+numdif is number of different examples across training and testing set (default 2000)
+
+"""
+arguments = sys.argv
+length = len(arguments)
+
+dataset_size = str(arguments[1]) if length > 1 else 'small'
+image_dim = (int(arguments[2]), int(arguments[2])) if length > 2 else (64,64)
+epochs = int(arguments[3]) if length > 3 else 30
+numsame = int(arguments[4]) if length > 4 else 2000
+numdif = int(arguments[5]) if length > 5 else 2000
+
+
+
+destination_path = dataset_size
+csv_path = os.path.join(curr_path, dataset_size)
+
+df = create_datasets(datasets_path, numsame=numsame, numdif=numdif, size=dataset_size)
+print("Datasets created")
+splitDF(df, destination_path)
+print("Datasets split and csvs are created")
 
 print("Concatinating training data")
-training_concatenator = Concatenator(datasets_path, os.path.join(csv_path, "train.csv"), image_dim=image_dim)
+training_concatenator = Concatenator(os.path.join(csv_path, "train.csv"), image_dim=image_dim)
 print("Finished")
 
 print("Concatinating testing data")
-testing_concatenator = Concatenator(datasets_path, os.path.join(csv_path, "test.csv"), image_dim=image_dim)
+testing_concatenator = Concatenator(os.path.join(csv_path, "test.csv"), image_dim=image_dim)
 print("Finished")
 
 batch_size = 64
@@ -44,7 +75,7 @@ print("Training Model")
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
-for epoch in range(1):
+for epoch in range(epochs):
 
     running_loss = 0.0
     for i, batch in enumerate(trainloader, 0):
@@ -103,7 +134,7 @@ print(f"True 1s = {cm[1]}, {cm[1]*100/total}%")
 print(f"False 0s = {cm[2]}, {cm[2]*100/total}%")
 print(f"False 1s = {cm[3]}, {cm[3]*100/total}%")
 
-file = open('cm_labels.csv', 'w+', newline='')
+file = open(str(dataset_size) + '/cm_labels.csv', 'w+', newline='')
 with file:
     write = csv.writer(file)
     write.writerows(cm_labels)

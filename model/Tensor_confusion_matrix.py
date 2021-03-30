@@ -12,18 +12,24 @@ def Tensor_confusion_matrix(prediction, labels):
 	pred_array = prediction.numpy().tolist()
 	labels_array = labels.numpy().tolist()
 
+	cm_labels = []
+
 	for index, item in enumerate(pred_array):
 		if item == 0:
 			if labels_array[index] == 0:
 				true_0 += 1
+				cm_labels.append(0)
 			else:
 				false_0 += 1
+				cm_labels.append(2)
 
 		elif item == 1:
 			if labels_array[index] == 0:
 				false_1 += 1
+				cm_labels.append(3)
 			else:
 				true_1 += 1
+				cm_labels.append(1)
 
-	return (true_0, true_1, false_0, false_1) 
+	return (true_0, true_1, false_0, false_1), cm_labels 
 
