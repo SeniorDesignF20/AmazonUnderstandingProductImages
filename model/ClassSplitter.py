@@ -29,7 +29,6 @@ def ClassSplitter(dataset_path, size='small'):
 			classes.append(folder)
 			num_classes = num_classes - 1
 
-	print(classes)
 	return classes
 
 

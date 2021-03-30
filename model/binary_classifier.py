@@ -6,12 +6,15 @@ import torch.nn as nn
 import torchvision
 import csv
 import sys
+import time
 from CreateSplits import create_datasets, splitDF
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
+
+start_time = time.time()
 
 curr_path = os.path.dirname(os.path.abspath(__file__))
 datasets_path = str(Path(curr_path).parents[0]) + '/Datasets'
@@ -124,6 +127,10 @@ with torch.no_grad():
         cm = tuple(
             map(operator.add, cm, matrix))
 
+end_time = time.time()
+hours, rem = divmod(end_time-start_time, 3600)
+minutes, seconds = divmod(rem, 60)
+time_elapsed = "{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds)
 
 print(f"Accuracy over test set: {100*correct/total}%")
 print()
@@ -140,7 +147,14 @@ with file:
     write.writerows(cm_labels)
 
 file = open(str(dataset_size) + '/results.csv', 'w+', newline='')
-data = [('Accuracy over test set', 100*correct/total),
+data = [('Time Elapsed', time_elapsed),
+        ('Dataset Size', dataset_size),
+        ('Epochs', epochs),
+        ('Image dimensions', image_dim),
+        ('Number of Training Images', training_concatenator.__len__()),
+        ('Number of Testing Images', testing_concatenator.__len__()),
+        ('Same to Difference Ratio', numsame/numdif),
+        ('Accuracy over test set', 100*correct/total),
         ('True 0s', cm[0]*100/total),
         ('True 1s', cm[1]*100/total),
         ('False 0s', cm[2]*100/total),
