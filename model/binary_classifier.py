@@ -138,3 +138,13 @@ file = open(str(dataset_size) + '/cm_labels.csv', 'w+', newline='')
 with file:
     write = csv.writer(file)
     write.writerows(cm_labels)
+
+file = open(str(dataset_size) + '/results.csv', 'w+', newline='')
+data = [('Accuracy over test set', 100*correct/total),
+        ('True 0s', cm[0]*100/total),
+        ('True 1s', cm[1]*100/total),
+        ('False 0s', cm[2]*100/total),
+        ('False 1s', cm[3]*100/total)]
+with file:
+    write = csv.writer(file)
+    write.writerows(data)
