@@ -145,7 +145,7 @@ with file:
     write = csv.writer(file)
     write.writerows(cm_labels)
 
-file = open(str(dataset_size) + '/results.csv', 'w+', newline='')
+file = open(str(dataset_size) + f'/{dataset_size}_results.csv', 'w+', newline='')
 data = [('Hours', math.floor(time_elapsed/3600)),
         ('Minutes', math.floor(time_elapsed/60)),
         ('Dataset Size', dataset_size),
