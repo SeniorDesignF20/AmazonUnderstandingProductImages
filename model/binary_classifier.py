@@ -130,6 +130,8 @@ with torch.no_grad():
 
 end_time = time.time()
 time_elapsed = end_time - start_time
+hours = math.floor(time_elapsed/3600)
+minutes = math.floor((time_elapsed - 3600*math.floor(time_elapsed/3600))/60)
 
 print(f"Accuracy over test set: {100*correct/total}%")
 print()
@@ -146,8 +148,8 @@ with file:
     write.writerows(cm_labels)
 
 file = open(str(dataset_size) + f'/{dataset_size}_results.csv', 'w+', newline='')
-data = [('Hours', math.floor(time_elapsed/3600)),
-        ('Minutes', math.floor(time_elapsed/60)),
+data = [('Hours', hours),
+        ('Minutes', minutes),
         ('Dataset Size', dataset_size),
         ('Epochs', epochs),
         ('Image dimensions', image_dim),
