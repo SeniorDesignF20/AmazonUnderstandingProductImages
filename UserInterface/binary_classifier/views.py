@@ -17,3 +17,6 @@ def binary_classifier(request):
             return render(request, 'binary_classifier.html', {'upload2_successful': True})
     return render(request, 'binary_classifier.html')
 
+def about(request):
+    return render(request, 'about.html')
+

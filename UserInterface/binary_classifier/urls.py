@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.binary_classifier, name='binary_classifier'),
+    path('about/', views.about, name='about'),
 ]
 
 if settings.DEBUG:

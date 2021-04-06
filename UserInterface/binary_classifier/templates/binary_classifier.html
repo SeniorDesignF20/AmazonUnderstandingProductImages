@@ -1,33 +1,41 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div class="mt-2 mb-2 row">
-    <div class="col">
-        <form method="post" enctype="multipart/form-data">
-            <label class="form-label" for="customFile">Image 1</label>
-            {% csrf_token %}
-            <input type="file" name="image" class="form-control" id="customFile" />
-            <button type="submit" name="image1_btn" class="mt-2 btn btn-dark"> Upload </button>
-        </form>
-        {% if upload1_successful %}
-            <p>Image uploaded successfully.</p>
-        {% endif %}
-    </div>
-    <div class="col">
-        <form method="post" enctype="multipart/form-data">
-            <label class="form-label" for="customFile">Image 2</label>
-            {% csrf_token %}
-            <input type="file" name="image" class="form-control" id="customFile" />
-            <button type="submit" name="image2_btn" class="mt-2 btn btn-dark"> Upload </button>
-        </form>
-        {% if upload2_successful %}
-            <p>Image uploaded successfully.</p>
-        {% endif %}
-    </div>
-    <div class="mt-5 mb-2 row justify-content-center"> 
-        <button type="submit" class="btn btn-primary" style="width: 100px;"> Classify </button>
+<div class="bg-light">
+    <div class="container py-5">
+        <div class="row mb-4">
+            <h2 class="display-4 font-weight-light">Difference Detector Model</h2>
+        </div>
+        <div class="py-5 row">
+            <div class="col">
+                <form method="post" enctype="multipart/form-data">
+                    <label class="form-label" for="customFile">Image 1</label>
+                    {% csrf_token %}
+                    <input type="file" name="image" class="form-control" id="customFile" />
+                    <button type="submit" name="image1_btn" class="mt-2 btn btn-dark"> Upload </button>
+                </form>
+                {% if upload1_successful %}
+                    <p>Image uploaded successfully.</p>
+                {% endif %}
+            </div>
+            <div class="col">
+                <form method="post" enctype="multipart/form-data">
+                    <label class="form-label" for="customFile">Image 2</label>
+                    {% csrf_token %}
+                    <input type="file" name="image" class="form-control" id="customFile" />
+                    <button type="submit" name="image2_btn" class="mt-2 btn btn-dark"> Upload </button>
+                </form>
+                {% if upload2_successful %}
+                    <p>Image uploaded successfully.</p>
+                {% endif %}
+            </div>
+            <div class="mt-5 mb-2 row justify-content-center"> 
+                <button type="submit" class="btn btn-primary" style="width: 100px;"> Classify </button>
+            </div>
+        </div>
     </div>
 </div>
+
 
 
 
