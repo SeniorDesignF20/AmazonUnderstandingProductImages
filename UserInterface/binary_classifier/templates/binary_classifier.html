@@ -12,11 +12,12 @@
                     <label class="form-label" for="customFile">Image 1</label>
                     {% csrf_token %}
                     <input type="file" name="image" class="form-control" id="customFile" />
-                    <button type="submit" name="image1_btn" class="mt-2 btn btn-dark rounded mx-auto d-block"> Upload </button>
+                    <button type="submit" name="image1_btn" class="mt-2 btn btn-dark rounded mx-auto d-block"> Upload
+                    </button>
                 </form>
                 <br>
                 {% if img1_path == './media/image1.jpg'%}
-                    <img src="{{ img1_path }}" class="rounded mx-auto d-block" width="300px"/>
+                <img src="{{ img1_path }}" class="rounded mx-auto d-block" width="300px" />
                 {% endif %}
             </div>
             <div class="col">
@@ -24,16 +25,24 @@
                     <label class="form-label" for="customFile">Image 2</label>
                     {% csrf_token %}
                     <input type="file" name="image" class="form-control" id="customFile" />
-                    <button type="submit" name="image2_btn" class="mt-2 btn btn-dark rounded mx-auto d-block"> Upload </button>
+                    <button type="submit" name="image2_btn" class="mt-2 btn btn-dark rounded mx-auto d-block"> Upload
+                    </button>
                 </form>
                 <br>
                 {% if img2_path == './media/image2.jpg'%}
-                    <img src="{{ img2_path }}" class="rounded mx-auto d-block" width="300px"/>
+                <img src="{{ img2_path }}" class="rounded mx-auto d-block" width="300px" />
                 {% endif %}
             </div>
-            <div class="mt-5 mb-2 row justify-content-center"> 
-                <button type="submit" class="btn btn-primary" style="width: 100px;"> Classify </button>
-            </div>
+            <form method="post">
+                <div class="mt-5 mb-2 row justify-content-center">
+                    {% csrf_token %}
+                    <button type="submit" name="classify" class="btn btn-primary" style="width: 100px;"> Classify
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="mt-5 mb-2 row justify-content-center">
+            <h2 class="display-4 font-weight-light"> Score: {{classify_val}} </h2>
         </div>
     </div>
 </div>
