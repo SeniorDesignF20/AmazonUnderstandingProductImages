@@ -10,7 +10,7 @@ import cv2
 
 class Concatenator(Dataset):
 
-    def __init__(self, csvfile, image_dim=(56, 56)):
+    def __init__(self, csvfile=None, image_dim=(56, 56)):
         self.concatenated_images = []
         self.first_images = []
         self.second_images = []
@@ -24,7 +24,17 @@ class Concatenator(Dataset):
             T.Resize(image_dim),
             T.ToTensor()])
 
-        self.load(csvfile)
+        if csvfile is not None:
+            self.load(csvfile)
+
+    def concatenate(self, image1, image2):
+        image1 = np.asarray(Image.open(image1))
+        image2 = np.asarray(Image.open(image2))
+
+        transformed1 = self.transform(image1)
+        transformed2 = self.transform(image2)
+
+        return torch.cat((transformed1, transformed2), 0)
 
     def first_images(self):
         return self.first_images
@@ -56,7 +66,6 @@ class Concatenator(Dataset):
         return item, label
 
     def load(self, csvfile):
-        # This code is ugly lmao I'll clean it eventually
 
         df = pd.read_csv(csvfile)
 
@@ -80,15 +89,6 @@ class Concatenator(Dataset):
             
             transformed1 = self.transform(image1)
             transformed2 = self.transform(image2)
-
-            m1 = torch.mean(torch.flatten(transformed1))
-            m2 = torch.mean(torch.flatten(transformed2))
-
-            s1 = torch.std(torch.flatten(transformed1))
-            s2 = torch.std(torch.flatten(transformed2))
-
-            transformed1 = (transformed1 - m1)
-            transformed2 = (transformed2 - m2)
 
             concatenated = torch.cat((transformed1, transformed2), 0)
 
