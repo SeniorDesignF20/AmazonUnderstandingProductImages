@@ -7,7 +7,7 @@ from Concatenator import Concatenator
 # image1 and image2 are expected to be paths to the images
 
 
-def classify(image1, image2, size='small'):
+def classify(image1, image2, path, size='small'):
     concatenator = Concatenator()
     concatenated_image = concatenator.concatenate(image1, image2)
     concatenated_image = torch.tensor(
@@ -19,7 +19,8 @@ def classify(image1, image2, size='small'):
 
     model = Modified_LeNet(batch_size=batch_size, dim=dim)
 
-    parameters_path = os.path.join(os.getcwd(), "parameters")
+    #parameters_path = os.path.join(os.getcwd(), "parameters")
+    parameters_path = os.path.join(path, "parameters")
     model.load_state_dict(torch.load(
     os.path.join(parameters_path, size + '.pth')))
 
