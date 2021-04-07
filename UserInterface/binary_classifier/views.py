@@ -25,13 +25,6 @@ def binary_classifier(request):
         elif 'image2_btn' in request.POST:
             filename = fs.save('image2.jpg', img)
 
-        return redirect('binary_classifier')
-
-    if os.path.isfile('./media/image1.jpg'):
-        img1_path = './media/image1.jpg'
-    if os.path.isfile('./media/image2.jpg'):
-        img2_path = './media/image2.jpg'
-
     if request.method == 'POST' and 'classify' in request.POST:
         curr_path = os.path.dirname(os.path.abspath(__file__))
         classify_path = str(
@@ -40,6 +33,11 @@ def binary_classifier(request):
         print(classify_path)
         from binary_classify import classify
         classify_val = classify(img1_path, img2_path, "small")
+    
+    if os.path.isfile('./media/image1.jpg'):
+        img1_path = './media/image1.jpg'
+    if os.path.isfile('./media/image2.jpg'):
+        img2_path = './media/image2.jpg'
 
     return render(request, 'binary_classifier.html', {'img1_path': img1_path, 'img2_path': img2_path, 'classify_val': classify_val})
 
