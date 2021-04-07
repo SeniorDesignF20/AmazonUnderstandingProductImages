@@ -1,0 +1,13 @@
+Hours,6
+Minutes,57
+Dataset Size,small
+Epochs,40
+Image dimensions,"(120, 120)"
+Number of Training Images,10910
+Number of Testing Images,3637
+Same to Different Ratio,2.0
+Accuracy over test set,76.54660434423975
+True 0s,20.016497113005226
+True 1s,56.53010723123453
+False 0s,9.128402529557327
+False 1s,14.324993126202914
