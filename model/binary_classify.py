@@ -30,12 +30,6 @@ def classify(image1, image2, path, size='small'):
 
 
 #Example code
-"""
-image1 = '/c/Users/sorou/Desktop/SeniorDesign/Datasets/Wallets/B000078QZN/B000078QZN_0.jpg'
-image2 = '/c/Users/sorou/Desktop/SeniorDesign/Datasets/Wallets/B000078QZN/B000078QZN_4.jpg'
-
-print(classify(image1, image2, size='large'))
-"""
 
 # image1 = '.\DataSets\Accessories\B000922SGS_9.jpg'
 # image2 = '.\DataSets\Accessories\B000922SGS_1.jpg'

@@ -15,8 +15,6 @@ from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
-from pytorch_grad_cam import CAM
-from pytorch_grad_cam.utils.image import show_cam_on_image
 
 start_time = time.time()
 
@@ -39,7 +37,7 @@ numdif is number of different examples across training and testing set (default 
 arguments = sys.argv
 length = len(arguments)
 
-dataset_size = str(arguments[1]) if length > 1 else 'small'
+dataset_size = str(arguments[1]) if length > 1 else 'medium'
 image_dim = (int(arguments[2]), int(arguments[2])) if length > 2 else (56,56)
 epochs = int(arguments[3]) if length > 3 else 1
 numsame = int(arguments[4]) if length > 4 else 50
@@ -171,54 +169,3 @@ with file:
 parameters_path = os.path.join(os.getcwd(), "parameters")
 
 torch.save(model.state_dict(), os.path.join(parameters_path, dataset_size + '.pth'))
-
-
-torch_img = testing_concatenator.concatenated_images[0]
-torch_img = torch.tensor(np.expand_dims(torch_img, axis=0))
-method = 'gradcam++'
-input_tensor = torch_img
-
-
-target_layer3 = model.layer3
-target_layer6 = model.layer6
-
-cam3 = CAM(model=model, target_layer=target_layer3)
-cam6 = CAM(model=model, target_layer=target_layer6)
-
-grayscale_cam3 = cam3(input_tensor=input_tensor, method=method)
-grayscale_cam6 = cam6(input_tensor=input_tensor, method=method)
-
-first_image = testing_concatenator.first_images[0].numpy()
-first_image = np.moveaxis(first_image, 0, -1)
-
-second_image = testing_concatenator.second_images[0].numpy()
-second_image = np.moveaxis(second_image, 0, -1)
-
-visualization61 = show_cam_on_image(first_image, grayscale_cam6)
-visualization62 = show_cam_on_image(second_image, grayscale_cam6)
-
-
-
-plt.imshow(testing_concatenator.first_images_original[0])
-plt.show()
-
-plt.imshow(testing_concatenator.second_images_original[0])
-plt.show()
-
-plt.imshow(grayscale_cam3)
-plt.show()
-
-plt.imshow(grayscale_cam6)
-plt.show()
-
-plt.imshow(visualization61)
-plt.show()
-
-plt.imshow(visualization62)
-plt.show()
-
-
-
-
-
-
