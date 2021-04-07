@@ -14,6 +14,8 @@ class Concatenator(Dataset):
         self.concatenated_images = []
         self.first_images = []
         self.second_images = []
+        self.first_images_original = []
+        self.second_images_original = []
         self.labels = []
         self.image_dim = image_dim
 
@@ -29,6 +31,12 @@ class Concatenator(Dataset):
 
     def second_images(self):
         return self.second_images
+    
+    def first_images_original(self):
+        return self.first_images_original
+
+    def second_images_oriinal(self):
+        return self.second_images_original
 
     def concatenated_images(self):
         return self.concatenated_images
@@ -58,11 +66,11 @@ class Concatenator(Dataset):
 
             name1 = df["image1"][i]
             image1 = np.asarray(Image.open(name1))
-            self.first_images.append(image1)
+            self.first_images_original.append(image1)
 
             name2 = df["image2"][i]
             image2 = np.asarray(Image.open(name2))
-            self.second_images.append(image2)
+            self.second_images_original.append(image2)
 
             if df["label"][i] == "same":
                 self.labels.append(1)
@@ -84,4 +92,6 @@ class Concatenator(Dataset):
 
             concatenated = torch.cat((transformed1, transformed2), 0)
 
+            self.first_images.append(transformed1)
+            self.second_images.append(transformed2)
             self.concatenated_images.append(concatenated)

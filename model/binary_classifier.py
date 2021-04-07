@@ -8,12 +8,15 @@ import csv
 import sys
 import time
 import math
+import matplotlib.pyplot as plt
 from CreateSplits import create_datasets, splitDF
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pathlib import Path
 from Tensor_confusion_matrix import Tensor_confusion_matrix
+from pytorch_grad_cam import CAM
+from pytorch_grad_cam.utils.image import show_cam_on_image
 
 start_time = time.time()
 
@@ -37,10 +40,10 @@ arguments = sys.argv
 length = len(arguments)
 
 dataset_size = str(arguments[1]) if length > 1 else 'small'
-image_dim = (int(arguments[2]), int(arguments[2])) if length > 2 else (64,64)
-epochs = int(arguments[3]) if length > 3 else 30
-numsame = int(arguments[4]) if length > 4 else 2000
-numdif = int(arguments[5]) if length > 5 else 2000
+image_dim = (int(arguments[2]), int(arguments[2])) if length > 2 else (128,128)
+epochs = int(arguments[3]) if length > 3 else 1
+numsame = int(arguments[4]) if length > 4 else 50
+numdif = int(arguments[5]) if length > 5 else 50
 
 
 
@@ -131,7 +134,7 @@ with torch.no_grad():
 end_time = time.time()
 time_elapsed = end_time - start_time
 hours = math.floor(time_elapsed/3600)
-minutes = math.floor((time_elapsed - 3600*math.floor(time_elapsed/3600))/60)
+minutes = math.floor((time_elapsed - 3600*hours)/60)
 
 print(f"Accuracy over test set: {100*correct/total}%")
 print()
@@ -164,3 +167,54 @@ data = [('Hours', hours),
 with file:
     write = csv.writer(file)
     write.writerows(data)
+
+
+torch_img = testing_concatenator.concatenated_images[0]
+torch_img = torch.tensor(np.expand_dims(torch_img, axis=0))
+method = 'gradcam++'
+input_tensor = torch_img
+
+
+target_layer3 = model.layer3
+target_layer6 = model.layer6
+
+cam3 = CAM(model=model, target_layer=target_layer3)
+cam6 = CAM(model=model, target_layer=target_layer6)
+
+grayscale_cam3 = cam3(input_tensor=input_tensor, method=method)
+grayscale_cam6 = cam6(input_tensor=input_tensor, method=method)
+
+first_image = testing_concatenator.first_images[0].numpy()
+first_image = np.moveaxis(first_image, 0, -1)
+
+second_image = testing_concatenator.second_images[0].numpy()
+second_image = np.moveaxis(second_image, 0, -1)
+
+visualization61 = show_cam_on_image(first_image, grayscale_cam6)
+visualization62 = show_cam_on_image(second_image, grayscale_cam6)
+
+
+
+plt.imshow(testing_concatenator.first_images_original[0])
+plt.show()
+
+plt.imshow(testing_concatenator.second_images_original[0])
+plt.show()
+
+plt.imshow(grayscale_cam3)
+plt.show()
+
+plt.imshow(grayscale_cam6)
+plt.show()
+
+plt.imshow(visualization61)
+plt.show()
+
+plt.imshow(visualization62)
+plt.show()
+
+
+
+
+
+

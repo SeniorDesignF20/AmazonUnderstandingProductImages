@@ -14,21 +14,35 @@ class Modified_LeNet(nn.Module):
 		bs = batch_size
 		bs1 = int(bs)
 
-		self.features = nn.Sequential(
-			nn.Conv2d(in_channels=num_channels, out_channels=bs, kernel_size=5, stride=1),
-			nn.Tanh(),
-			nn.AvgPool2d(kernel_size=2),
-			nn.Conv2d(in_channels=bs, out_channels=bs1, kernel_size=5, stride=1),
-			nn.Tanh(),
-			nn.AvgPool2d(kernel_size=2),
-			nn.Conv2d(in_channels=bs1, out_channels=bs1, kernel_size=5, stride=1),
-			nn.Tanh()
+		self.layer0 = nn.Conv2d(in_channels=num_channels, out_channels=bs, kernel_size=5, stride=1)
+		self.layer1 = nn.Tanh()
+		self.layer2 = nn.AvgPool2d(kernel_size=2)
+		self.layer3 = nn.Conv2d(in_channels=bs, out_channels=bs1, kernel_size=5, stride=1)
+		self.layer4 = nn.Tanh()
+		self.layer5 = nn.AvgPool2d(kernel_size=2)
+		self.layer6 = nn.Conv2d(in_channels=bs1, out_channels=bs1, kernel_size=5, stride=1)
+		self.layer7 = nn.Tanh()
+
+		self.fc0 = nn.Linear(in_features=bs1 * dim * dim, out_features=bs1)
+		self.fc1 = nn.Tanh()
+		self.fc2 = nn.Linear(in_features=bs1, out_features=num_classes)
+		
+
+		self.layers = nn.Sequential(
+			self.layer0,
+			self.layer1,
+			self.layer2,
+			self.layer3,
+			self.layer4,
+			self.layer5,
+			self.layer6,
+			self.layer7
 		)
 
 		self.classifier = nn.Sequential(
-			nn.Linear(in_features=bs1 * dim * dim, out_features=bs1),
-			nn.Tanh(),
-			nn.Linear(in_features=bs1, out_features=num_classes)
+			self.fc0,
+			self.fc1,
+			self.fc2
 		)
 
 	def init_weights(self, layer):
@@ -37,7 +51,7 @@ class Modified_LeNet(nn.Module):
 			layer.bias.data.fill_(0.01)
 
 	def forward(self, x):
-		x = self.features(x)
+		x = self.layers(x)
 		x = torch.flatten(x, 1)
 		x = self.classifier(x)
 		return x
