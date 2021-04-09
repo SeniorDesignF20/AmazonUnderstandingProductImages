@@ -27,6 +27,10 @@ class Concatenator(Dataset):
         if csvfile is not None:
             self.load(csvfile)
 
+    def transform_image(self, image):
+        image = np.asarray(Image.open(image))
+        return self.transform(image)
+
     def concatenate(self, image1, image2):
         image1 = np.asarray(Image.open(image1))
         image2 = np.asarray(Image.open(image2))
