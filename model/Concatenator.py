@@ -4,6 +4,7 @@ import torch
 import torchvision.transforms as T
 from torch.utils.data import Dataset
 from PIL import Image
+from warp import warp
 import pandas as pd
 import cv2
 
@@ -87,10 +88,10 @@ class Concatenator(Dataset):
 
             if df["label"][i] == "same":
                 self.labels.append(1)
+                image2 = warp(name1, name2)
             else:
                 self.labels.append(0)
 
-            
             transformed1 = self.transform(image1)
             transformed2 = self.transform(image2)
 
