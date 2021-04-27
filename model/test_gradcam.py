@@ -62,14 +62,21 @@ def test_gradcam(size='small'):
 		whiteimage = np.zeros(first_image.shape, dtype=np.uint8)
 		whiteimage.fill(0)
 		heatmap = show_cam_on_image(whiteimage, grayscale_cam)
-		#CreateBox(first_image, heatmap)
+		image_boxes1 = CreateBox(first_image, heatmap)
+		image_boxes2 = CreateBox(second_image, heatmap)
+
 		
 		plt.figure(1)
-		plt.subplot(211)
-		plt.imshow(visualization0)
+		plt.subplot(311)
+		plt.imshow(image_boxes1)
 
-		plt.subplot(212)
-		plt.imshow(visualization1)
+		plt.subplot(312)
+		plt.imshow(image_boxes2)
+
+		plt.subplot(313)
+		plt.imshow(heatmap)
 		plt.show()
+		
+		
 
-test_gradcam(size='large')
+test_gradcam(size='small')
