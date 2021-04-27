@@ -16,6 +16,8 @@ def binary_classifier(request):
     classify_val = 'NaN'
     gradcam_vis1 = ""
     gradcam_vis2 = ""
+    box_vis1 = ""
+    box_vis2 = ""
 
     if request.method == 'POST' and 'image' in request.FILES:
         img = request.FILES['image']
@@ -40,10 +42,10 @@ def binary_classifier(request):
         from binary_classify import classify
         from gradcam import gradcam
         classify_val = classify(img1_path, img2_path, classify_path, "small")
-        gradcam_vis1, gradcam_vis2 = gradcam(
+        gradcam_vis1, gradcam_vis2, box_vis1, box_vis2 = gradcam(
             img1_path, img2_path, classify_path, "small")
 
-    return render(request, 'binary_classifier.html', {'img1_path': img1_path, 'img2_path': img2_path, 'classify_val': classify_val, 'vis1': gradcam_vis1, 'vis2': gradcam_vis2})
+    return render(request, 'binary_classifier.html', {'img1_path': img1_path, 'img2_path': img2_path, 'classify_val': classify_val, 'vis1': gradcam_vis1, 'vis2': gradcam_vis2, 'box1': box_vis1, 'box2': box_vis2})
 
 
 def about(request):
