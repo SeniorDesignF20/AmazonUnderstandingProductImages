@@ -1,12 +1,14 @@
-Time Elapsed,20597.528040647507
+Hours,2
+Minutes,42
 Dataset Size,medium
-Epochs,30
-Image dimensions,"(120, 120)"
-Number of Training Images,10613
-Number of Testing Images,3538
-Same to Different Ratio,2.0
-Accuracy over test set,77.44488411531938
-True 0s,21.90503109101187
-True 1s,55.53985302430752
-False 0s,10.514414923685699
-False 1s,12.040700960994913
+Epochs,40
+Image dimensions,"(80, 80)"
+Batch Size,64
+Number of Training Images,11648
+Number of Testing Images,3883
+Same to Different Ratio,0.6
+Accuracy over test set,66.5464846767963
+True 0s,51.55807365439094
+True 1s,14.988411022405357
+False 0s,20.654133402008757
+False 1s,12.799381921194952

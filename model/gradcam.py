@@ -50,13 +50,25 @@ def gradcam(image1, image2, path, size='small'):
     second_image = np.moveaxis(second_image, 0, -1)
     visualization2 = show_cam_on_image(second_image, grayscale_cam)
 
+    whiteimage = np.zeros(first_image.shape, dtype=np.uint8)
+    whiteimage.fill(0)
+    heatmap = show_cam_on_image(whiteimage, grayscale_cam)
+
+    image1_boxes = CreateBox(first_image, heatmap)
+    image2_boxes = CreateBox(second_image, heatmap)
+
     # Processing images so they can be displayed on User Interface
     visualization1 = to_image(visualization1)
     visualization2 = to_image(visualization2)
+    image1_boxes = to_image(image1_boxes)
+    image2_boxes = to_image(image2_boxes)
     visualization1 = to_data_uri(visualization1)
     visualization2 = to_data_uri(visualization2)
+    image1_boxes = to_data_uri(image1_boxes)
+    image2_boxes = to_data_uri(image2_boxes)
 
-    return visualization1, visualization2
+
+    return visualization1, visualization2, image1_boxes, image2_boxes
 
 
 def to_image(image):

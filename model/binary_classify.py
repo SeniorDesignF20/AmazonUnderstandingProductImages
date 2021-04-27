@@ -36,11 +36,3 @@ def classify(image1, image2, path, size='small'):
     output = model(concatenated_image)
     _, predicted = torch.max(output.data, 1)
     return predicted.numpy().tolist()[0]
-
-
-# Example code
-
-# image1 = '.\DataSets\Accessories\B000922SGS_9.jpg'
-# image2 = '.\DataSets\Accessories\B000922SGS_1.jpg'
-
-# print(classify(image1, image2, size='large'))

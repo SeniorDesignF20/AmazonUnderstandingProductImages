@@ -10,6 +10,7 @@ from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pytorch_grad_cam import CAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
+from CreateBox import CreateBox
 
 
 def test_gradcam(size='small'):
@@ -23,12 +24,6 @@ def test_gradcam(size='small'):
 	    image_dim = literal_eval(mycsv[4][1])
 	    batch_size = int(mycsv[5][1])
 
-	print(image_dim)
-	print(type(image_dim))
-	print(batch_size)
-	print(type(batch_size))
-	batch_size = 64
-
 	dim = image_dim[0]
 	dim = int((int(dim/2) - 2)/2) - 6
 	model = Modified_LeNet(batch_size=batch_size, dim=dim)
@@ -37,7 +32,6 @@ def test_gradcam(size='small'):
 	test_images_path = os.path.join(os.getcwd(), 'Test_GradCam')
 
 	for folder in os.listdir(test_images_path):
-		print(folder)
 		f = os.path.join(test_images_path, folder)
 
 		image0 = os.listdir(f)[0]
@@ -49,7 +43,6 @@ def test_gradcam(size='small'):
 		concatenator = Concatenator(csvfile=None, image_dim=image_dim)
 		input_tensor = concatenator.concatenate(image0, image1)
 		input_tensor = torch.tensor(np.expand_dims(input_tensor, axis=0))
-		#torch_img = torch.tensor(np.expand_dims(torch_img, axis=0))
 		method = 'gradcam++'
 
 		target_layer = model.layer6
@@ -61,8 +54,22 @@ def test_gradcam(size='small'):
 		first_image = concatenator.transform_image(image0).numpy()
 		first_image = np.moveaxis(first_image, 0, -1)
 		visualization0 = show_cam_on_image(first_image, grayscale_cam)
+
+		second_image = concatenator.transform_image(image1).numpy()
+		second_image = np.moveaxis(second_image, 0, -1)
+		visualization1 = show_cam_on_image(second_image, grayscale_cam)
+
+		whiteimage = np.zeros(first_image.shape, dtype=np.uint8)
+		whiteimage.fill(0)
+		heatmap = show_cam_on_image(whiteimage, grayscale_cam)
+		#CreateBox(first_image, heatmap)
+		
+		plt.figure(1)
+		plt.subplot(211)
 		plt.imshow(visualization0)
+
+		plt.subplot(212)
+		plt.imshow(visualization1)
 		plt.show()
 
-
-test_gradcam(size='small')
+test_gradcam(size='large')

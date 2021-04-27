@@ -13,6 +13,8 @@ def create_datasets(dataset_path, numsame=2000, numdif=2000, size='small'):
 	classes = ClassSplitter(dataset_path, size)
 	print(classes)
 
+	exceptions = ['.DS_Store', 'classifier.py', 'get_multiImage_products.py', 'sort.py', 'similar_images.py', 'classifier_models', 'duplicate ids']
+
 	for i in range(numsame):
 		print(i)
 		folder = random.choice(os.listdir(dataset_path))
@@ -67,7 +69,7 @@ def create_datasets(dataset_path, numsame=2000, numdif=2000, size='small'):
 	for i in range(numdif):
 		print(i)
 		folder = random.choice(os.listdir(dataset_path))
-		while folder not in classes:
+		while folder not in classes and folder in exceptions:
 			folder = random.choice(os.listdir(dataset_path))
 
 		folder = os.path.join(dataset_path, folder) # Folder = Number, e.g. 4
@@ -79,7 +81,7 @@ def create_datasets(dataset_path, numsame=2000, numdif=2000, size='small'):
 
 		subfolder2 = random.choice(os.listdir(folder))
 		count = 10
-		while subfolder1 == subfolder2 and count != 0:
+		while subfolder1 == subfolder2 and count != 0 and subfolder2 in exceptions:
 			subfolder2 = random.choice(os.listdir(folder))
 
 			count = count - 1

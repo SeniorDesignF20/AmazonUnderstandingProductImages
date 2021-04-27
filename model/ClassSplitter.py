@@ -9,7 +9,7 @@ import random
 def ClassSplitter(dataset_path, size='small'):
 
 	classes = []
-	exceptions = ['classifier_models', 'duplicate ids', '256_Object']
+	exceptions = ['classifier_models', 'duplicate ids', '256_Object', '.DS_Store']
 
 	if size == 'small':
 		num_classes = 10
