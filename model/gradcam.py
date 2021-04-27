@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import base64
 from io import BytesIO
+from CreateBox import CreateBox
 
 
 def gradcam(image1, image2, path, size='small'):
@@ -66,7 +67,9 @@ def gradcam(image1, image2, path, size='small'):
     visualization2 = to_data_uri(visualization2)
     image1_boxes = to_data_uri(image1_boxes)
     image2_boxes = to_data_uri(image2_boxes)
-
+    print(visualization1)
+    print("SPLIT")
+    print(image1_boxes)
 
     return visualization1, visualization2, image1_boxes, image2_boxes
 
