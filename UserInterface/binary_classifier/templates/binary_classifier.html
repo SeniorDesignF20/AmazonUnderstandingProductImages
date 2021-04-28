@@ -43,10 +43,28 @@
         </div>
         <div class="py-3 row text-center">
             <h2 class="display-4 font-weight-light"> Score: {{classify_val}} </h2>
-            <img src={{vis1}} />
-            <img src={{vis2}} />
-            <img src={{box1}} />
-            <img src={{box2}} />
+        </div>
+        <div class="py-3 row text-center">
+            <h3 class="display-4 font-weight-light"> GradCam Results: </h2>
+        </div>
+        <div class="py-3 row text-center">
+            <div class="col">
+                <img src={{vis1}} style="height: 240px" />
+            </div>
+            <div class=" col">
+                <img src={{vis2}} style="height: 240px" />
+            </div>
+        </div>
+        <div class="py-3 row text-center">
+            <h3 class="display-4 font-weight-light"> Bounding Box Results: </h2>
+        </div>
+        <div class="py-3 row text-center">
+            <div class="col">
+                <img src={{box1}} style="height: 240px" />
+            </div>
+            <div class=" col">
+                <img src={{box2}} style="height: 240px" />
+            </div>
         </div>
     </div>
 </div>
