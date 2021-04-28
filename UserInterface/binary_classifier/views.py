@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import sys
 from binary_classifier.storage import OverwriteStorage
+from PIL import Image
 
 # views.py
 
@@ -14,10 +15,10 @@ def binary_classifier(request):
     img1_path = ''
     img2_path = ''
     classify_val = 'NaN'
-    gradcam_vis1 = ""
-    gradcam_vis2 = ""
-    box_vis1 = ""
-    box_vis2 = ""
+    gradcam_vis1 = "./media/placeholder.jpg"
+    gradcam_vis2 = "./media/placeholder.jpg"
+    box_vis1 = "./media/placeholder.jpg"
+    box_vis2 = "./media/placeholder.jpg"
 
     if request.method == 'POST' and 'image' in request.FILES:
         img = request.FILES['image']
@@ -44,6 +45,14 @@ def binary_classifier(request):
         classify_val = classify(img1_path, img2_path, classify_path, "small")
         gradcam_vis1, gradcam_vis2, box_vis1, box_vis2 = gradcam(
             img1_path, img2_path, classify_path, "small")
+        gradcam_vis1.save('./media/vis1.png', 'PNG')
+        gradcam_vis2.save('./media/vis2.png', 'PNG')
+        box_vis1.save('./media/box1.png', 'PNG')
+        box_vis2.save('./media/box2.png', 'PNG')
+        gradcam_vis1 = "./media/vis1.png"
+        gradcam_vis2 = "./media/vis2.png"
+        box_vis1 = "./media/box1.png"
+        box_vis2 = "./media/box2.png"
 
     return render(request, 'binary_classifier.html', {'img1_path': img1_path, 'img2_path': img2_path, 'classify_val': classify_val, 'vis1': gradcam_vis1, 'vis2': gradcam_vis2, 'box1': box_vis1, 'box2': box_vis2})
 

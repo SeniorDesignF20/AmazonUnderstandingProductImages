@@ -58,18 +58,17 @@ def gradcam(image1, image2, path, size='small'):
     image1_boxes = CreateBox(first_image, heatmap)
     image2_boxes = CreateBox(second_image, heatmap)
 
+    image1_boxes = (image1_boxes*255).astype('uint8')
+    image2_boxes = (image2_boxes*255).astype('uint8')
     # Processing images so they can be displayed on User Interface
     visualization1 = to_image(visualization1)
     visualization2 = to_image(visualization2)
     image1_boxes = to_image(image1_boxes)
     image2_boxes = to_image(image2_boxes)
-    visualization1 = to_data_uri(visualization1)
-    visualization2 = to_data_uri(visualization2)
-    image1_boxes = to_data_uri(image1_boxes)
-    image2_boxes = to_data_uri(image2_boxes)
-    print(visualization1)
-    print("SPLIT")
-    print(image1_boxes)
+    # visualization1 = to_data_uri(visualization1)
+    # visualization2 = to_data_uri(visualization2)
+    # image1_boxes = to_data_uri(image1_boxes)
+    # image2_boxes = to_data_uri(image2_boxes)
 
     return visualization1, visualization2, image1_boxes, image2_boxes
 
@@ -81,9 +80,10 @@ def to_image(image):
 
 def to_data_uri(image):
     data = BytesIO()
-    image.save(data, "JPEG")
-    data64 = base64.b64encode(data.getvalue())
-    return u'data:img/jpeg;base64,'+data64.decode('utf-8')
+    image.save(data, "PNG")
+    return image
+    #data64 = base64.b64encode(data.getvalue())
+    # return u'data:img/jpeg;base64,'+data64.decode('utf-8')
 
 
 # gradcam("Test_GradCam\Bag\B00BU7VG6O_0.jpg",
