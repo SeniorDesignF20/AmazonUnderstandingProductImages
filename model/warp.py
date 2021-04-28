@@ -5,7 +5,7 @@ import os
 from PIL import Image
 
 
-# Warps img2 to match perspective of img1
+# Warps img1 to match perspective of img2 using SIFT
 def warp(img1, img2):
 
     img1 = cv2.imread(img1, cv2.IMREAD_COLOR)
@@ -44,24 +44,3 @@ def warp(img1, img2):
         aligned = img2
 
     return aligned
-
-"""
-cwd = os.getcwd()
-test = os.path.join(cwd, 'Test_GradCam')
-images = os.path.join(test, 'Glasses')
-
-img1 = os.path.join(images, os.listdir(images)[0])
-img2 = os.path.join(images, os.listdir(images)[1])
-
-fig = plt.figure()
-ax1 = fig.add_subplot(1,3,1)
-ax1.imshow(Image.open(img1))
-
-ax2 = fig.add_subplot(1,3,2)
-ax2.imshow(Image.open(img2))
-
-ax3 = fig.add_subplot(1,3,3)
-ax3.imshow(warp(img1, img2))
-
-plt.show()
-"""

@@ -35,19 +35,24 @@ class Concatenator(Dataset):
         image = np.asarray(Image.open(image))
         return self.transform(image)
 
+    def transform_image2(self, image):
+        return self.transform(image)
+
     def concatenate(self, path1, path2):
         image1 = np.asarray(Image.open(path1))
         image2 = np.asarray(Image.open(path2))
-        
-        """
-        try:
-            image2 = warp(path1, path2)
-        except:
-            image2 = np.asarray(Image.open(path2))
-        """
+    
 
         transformed1 = self.transform(image1)
         transformed2 = self.transform(image2)
+
+        return torch.cat((transformed1, transformed2), 0)
+    def concatenate2(self, path, image):
+        image1 = np.asarray(Image.open(path))
+        
+
+        transformed1 = self.transform(image1)
+        transformed2 = self.transform(image)
 
         return torch.cat((transformed1, transformed2), 0)
 
@@ -91,17 +96,6 @@ class Concatenator(Dataset):
             name1 = df["image1"][i]
             image1 = np.array(Image.open(name1))
             self.first_images_original.append(image1)
-            """
-            if df["label"][i] == "same":
-                image2 = cutandpaste(image1)
-                self.second_images_original.append(image2)
-                self.labels.append(1)
-                #image2 = warp(name1, name2)
-            else:
-                name2 = df["image2"][i]
-                image2 = np.array(Image.open(name2))
-                self.second_images_original.append(image2)
-                self.labels.append(0)"""
             
             if df["label"][i] == "same":
                 image2 = image1
@@ -115,10 +109,6 @@ class Concatenator(Dataset):
                     self.second_images_original.append(image2)
                 else:
                     image2 = cutandpaste(image1)
-
-                    if binomial(n=1, p=.33):
-                        image3 = cutandpaste(image2)
-                        image2 = image3
                     self.second_images_original.append(image2)
 
                 self.labels.append(0)
