@@ -67,13 +67,13 @@ def test_gradcam(size='small'):
 
 		
 		plt.figure(1)
-		plt.subplot(311)
+		plt.subplot(131)
 		plt.imshow(image_boxes1)
 
-		plt.subplot(312)
+		plt.subplot(132)
 		plt.imshow(image_boxes2)
 
-		plt.subplot(313)
+		plt.subplot(133)
 		plt.imshow(heatmap)
 		plt.show()
 		

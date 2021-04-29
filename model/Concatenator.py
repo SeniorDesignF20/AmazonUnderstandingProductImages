@@ -9,7 +9,6 @@ import pandas as pd
 import cv2
 from cutandpaste import cutandpaste
 from numpy.random import binomial
-from checkHist import checkHist
 
 
 class Concatenator(Dataset):
@@ -101,14 +100,13 @@ class Concatenator(Dataset):
                 image2 = image1
                 self.second_images_original.append(image2)
                 self.labels.append(1)
-                #image2 = warp(name1, name2)
             else:
                 if binomial(n=1,p=.2):
                     name2 = df["image2"][i]
                     image2 = np.array(Image.open(name2))
                     self.second_images_original.append(image2)
                 else:
-                    image2 = cutandpaste(image1)
+                    image2 = cutandpaste(image1, boundingBox=True)
                     self.second_images_original.append(image2)
 
                 self.labels.append(0)
