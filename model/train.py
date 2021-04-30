@@ -3,18 +3,17 @@ import operator
 import numpy as np
 import torch
 import torch.nn as nn
-import torchvision
 import csv
 import sys
 import time
 import math
-import matplotlib.pyplot as plt
 from CreateSplits import create_datasets, splitDF
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pathlib import Path
-from Tensor_confusion_matrix import Tensor_confusion_matrix
+from test import test
+from save_results import save_results
 
 start_time = time.time()
 
@@ -57,17 +56,10 @@ print("Concatinating training data")
 training_concatenator = Concatenator(os.path.join(csv_path, "train.csv"), image_dim=image_dim)
 print("Finished")
 
-print("Concatinating testing data")
-testing_concatenator = Concatenator(os.path.join(csv_path, "test.csv"), image_dim=image_dim)
-print("Finished")
-
 batch_size = 64
 
 print("Loading training set")
 trainloader = DataLoader(training_concatenator, batch_size, shuffle=True)
-
-print("Loading testing set")
-testloader = DataLoader(testing_concatenator, batch_size, shuffle=False)
 
 print("Creating Model")
 dim = training_concatenator.image_dim[0]
@@ -99,74 +91,18 @@ for epoch in range(epochs):
     print(f"Epoch {epoch}: Loss = {running_loss}")
     running_loss = 0
 
-print("Testing Model")
-
-correct = 0
-total = 0
-
-cm = (0, 0, 0, 0)
-
-cm_labels = []
-
-reverse_legend = {
-        0: "True0",
-        1: "True1",
-        2: "False0",
-        3: "False1"
-    }
-
-with torch.no_grad():
-    for data in testloader:
-        images, labels = data
-        outputs = model(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-
-        matrix, matrix_labels = Tensor_confusion_matrix(predicted, labels)
-        for i in matrix_labels:
-            cm_labels.append([reverse_legend[i]])
-        cm = tuple(
-            map(operator.add, cm, matrix))
-
 end_time = time.time()
 time_elapsed = end_time - start_time
 hours = math.floor(time_elapsed/3600)
 minutes = math.floor((time_elapsed - 3600*hours)/60)
 
-print(f"Accuracy over test set: {100*correct/total}%")
-print()
-
-print("0=Different, 1=Same")
-print(f"True 0s = {cm[0]}, {cm[0]*100/total}%")
-print(f"True 1s = {cm[1]}, {cm[1]*100/total}%")
-print(f"False 0s = {cm[2]}, {cm[2]*100/total}%")
-print(f"False 1s = {cm[3]}, {cm[3]*100/total}%")
-
-file = open(str(dataset_size) + '/cm_labels.csv', 'w+', newline='')
-with file:
-    write = csv.writer(file)
-    write.writerows(cm_labels)
-
-file = open(str(dataset_size) + f'/{dataset_size}_results.csv', 'w+', newline='')
-data = [('Hours', hours),
-        ('Minutes', minutes),
-        ('Dataset Size', dataset_size),
-        ('Epochs', epochs),
-        ('Image dimensions', image_dim),
-        ('Batch Size', batch_size),
-        ('Number of Training Images', training_concatenator.__len__()),
-        ('Number of Testing Images', testing_concatenator.__len__()),
-        ('Same to Different Ratio', numsame/numdif),
-        ('Accuracy over test set', 100*correct/total),
-        ('True 0s', cm[0]*100/total),
-        ('True 1s', cm[1]*100/total),
-        ('False 0s', cm[2]*100/total),
-        ('False 1s', cm[3]*100/total)]
-with file:
-    write = csv.writer(file)
-    write.writerows(data)
-
 parameters_path = os.path.join(os.getcwd(), "parameters")
-
 torch.save(model.state_dict(), os.path.join(parameters_path, dataset_size + '.pth'))
+
+
+print("Testing Model")
+
+training_concatenator_length = training_concatenator.__len__()
+cm, cm_labels, correct, testing_concatenator_length = test(dataset_size, image_dim, batch_size)
+save_results(dataset_size, image_dim, epochs, numsame, numdif, batch_size, 
+	hours, minutes, cm, cm_labels, correct, training_concatenator_length, testing_concatenator_length)

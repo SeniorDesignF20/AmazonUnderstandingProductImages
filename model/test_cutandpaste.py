@@ -79,4 +79,4 @@ def test_capandmodel(size='small'):
 		
 		
 
-test_capandmodel(size='medium')
+test_capandmodel(size='large')

@@ -79,4 +79,4 @@ def test_gradcam(size='small'):
 		
 		
 
-test_gradcam(size='small')
+test_gradcam(size='large')
