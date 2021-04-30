@@ -46,7 +46,10 @@ def CreateBox(image, heatmap):
 	    green = rgb[1]
 	    blue = rgb[2]
 
-	    if (red > blue) and (red > green):
+	    box_area = h*w
+	    image_area = heatmap.shape[0]*heatmap.shape[1]
+
+	    if (red > blue) and (red > green) and box_area>.05*image_area:
 	    	cv2.rectangle(image, (x, y), (x + w, y + h), (255,0,0), 2)
 
 	return(image)

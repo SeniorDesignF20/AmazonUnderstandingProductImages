@@ -1,10 +1,12 @@
 from PIL import Image, ImageOps
+import numpy as np
 import cv2
 import os
 import random
 
 
-def cutandpaste(im):
+def cutandpaste(image, boundingBox=False):
+    im = np.copy(image)
     ysize, xsize = im.shape[0:2]
     xbox = int(xsize/4)
     ybox = int(ysize/4)
@@ -16,7 +18,8 @@ def cutandpaste(im):
 
     box = im[yrand1:(yrand1 + ybox), xrand1:(xrand1 + xbox)]
     im[yrand2:(yrand2 + ybox), xrand2:(xrand2 + xbox)] = box
-    
-    cv2.rectangle(im,(xrand1, yrand1),(xrand1 + xbox, yrand1 + ybox), [255,0,0], 1)
-    cv2.rectangle(im,(xrand2, yrand2),(xrand2 + xbox, yrand2 + ybox), [0,0,255], 1) 
+
+    if boundingBox:
+        cv2.rectangle(im,(xrand1, yrand1),(xrand1 + xbox, yrand1 + ybox), [0,255,0], 1)
+        cv2.rectangle(im,(xrand2, yrand2),(xrand2 + xbox, yrand2 + ybox), [0,0,255], 1) 
     return im
