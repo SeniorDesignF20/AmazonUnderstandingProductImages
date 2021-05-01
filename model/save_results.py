@@ -14,7 +14,6 @@ from Concatenator import Concatenator
 from pathlib import Path
 from confusion_matrix import confusion_matrix
 from plot_confusion_matrix import plot_confusion_matrix
-from rocauc import rocauc
 
 def save_results(dataset_size, image_dim, epochs, numsame, numdif, batch_size, 
 	hours, minutes, cm, cm_labels, correct, training_concatenator_length, testing_concatenator_length):

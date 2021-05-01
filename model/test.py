@@ -14,7 +14,7 @@ from Concatenator import Concatenator
 from pathlib import Path
 from confusion_matrix import confusion_matrix
 from plot_confusion_matrix import plot_confusion_matrix
-from rocauc import rocauc
+from sklearn.metrics import roc_auc_score
 
 
 
@@ -71,8 +71,6 @@ def test(dataset_size, image_dim, batch_size):
 	        cm = tuple(
 	            map(operator.add, cm, matrix))
 
-	P, y = np.vstack(results), np.hstack(truths)
-
 	correct = round(100*correct/total,3)
 
 	print(f"Accuracy over test set: {correct}%")
@@ -87,6 +85,24 @@ def test(dataset_size, image_dim, batch_size):
 	cm = [round(cm[i]*100/total,3) for i in range(4)]
 	plot_confusion_matrix(cm)
 
+	y_true, y_score = np.hstack(truths), np.vstack(results)
+
+	"""print(y_true.shape)
+	print(y_score.shape)
+	rocauc = roc_auc_score(y_true, y_score)
+	Precision = cm[1]/(cm[1] + cm[3])
+	Recall = cm[1]/(cm[1] + cm[2])
+	F1 = 2*Precision*Recall/(Precision + Recall)
+
+	fig, ax = plt.subplots(1,1)
+	data = [[rocauc], [Precision], [Recall], [F1]]
+	row_labels = ['AUC Score', 'Precision', 'Recall', 'F1 Score']
+	ax.axis('tight')
+	ax.axis('off')
+	ax.table(cellText=data, rowLabels=row_labels, loc='center')
+	plt.show()"""
+
+
 	return cm, cm_labels, correct, testing_concatenator.__len__()
 
-test('medium', (150,150), 64)
+#test('small', (80,80), 64)
