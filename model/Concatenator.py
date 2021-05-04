@@ -106,7 +106,7 @@ class Concatenator(Dataset):
                     image2 = np.array(Image.open(name2))
                     self.second_images_original.append(image2)
                 else:
-                    image2 = cutandpaste(image1, boundingBox=True)
+                    image2 = cutandpaste(image1)
                     self.second_images_original.append(image2)
 
                 self.labels.append(0)

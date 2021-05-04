@@ -17,7 +17,7 @@ def ClassSplitter(dataset_path, size='small'):
 	elif size == 'medium':
 		num_classes = 20
 
-	elif size == 'large':
+	else:
 		for folder in os.listdir(dataset_path):
 			if os.path.isdir(os.path.join(dataset_path, folder)) and folder not in exceptions:
 				classes.append(folder)

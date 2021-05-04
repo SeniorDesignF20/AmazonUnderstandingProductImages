@@ -8,13 +8,13 @@ import sys
 import time
 import math
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pathlib import Path
 from confusion_matrix import confusion_matrix
-from plot_confusion_matrix import plot_confusion_matrix
-from sklearn.metrics import roc_auc_score
+from plot_metrics import plot_metrics
 
 
 
@@ -83,26 +83,14 @@ def test(dataset_size, image_dim, batch_size):
 	print(f"False 1s = {cm[3]}, {round(cm[3]*100/total)}%")
 
 	cm = [round(cm[i]*100/total,3) for i in range(4)]
-	plot_confusion_matrix(cm)
 
-	y_true, y_score = np.hstack(truths), np.vstack(results)
+	y_true, y_ = np.hstack(truths), np.vstack(results)
 
-	"""print(y_true.shape)
-	print(y_score.shape)
-	rocauc = roc_auc_score(y_true, y_score)
-	Precision = cm[1]/(cm[1] + cm[3])
-	Recall = cm[1]/(cm[1] + cm[2])
-	F1 = 2*Precision*Recall/(Precision + Recall)
+	y_score = [max(k) for k in y_]
 
-	fig, ax = plt.subplots(1,1)
-	data = [[rocauc], [Precision], [Recall], [F1]]
-	row_labels = ['AUC Score', 'Precision', 'Recall', 'F1 Score']
-	ax.axis('tight')
-	ax.axis('off')
-	ax.table(cellText=data, rowLabels=row_labels, loc='center')
-	plt.show()"""
+	plot_metrics(cm, y_true, y_score)
 
 
 	return cm, cm_labels, correct, testing_concatenator.__len__()
 
-#test('small', (80,80), 64)
+test('small', (130,130), 64)

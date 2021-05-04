@@ -79,4 +79,4 @@ def test_cutandpaste(size='small'):
 		
 		
 
-test_cutandpaste(size='large')
+test_cutandpaste(size='small')
