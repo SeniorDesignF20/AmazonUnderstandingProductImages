@@ -5,7 +5,7 @@ import csv
 from ast import literal_eval
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
-from pytorch_grad_cam import CAM
+from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -36,12 +36,12 @@ def gradcam(image1, image2, path, size='small'):
     input_tensor = concatenator.concatenate(image1, image2)
     input_tensor = torch.tensor(np.expand_dims(input_tensor, axis=0))
 
-    method = 'gradcam++'
     target_layer = model.layer6
 
-    cam = CAM(model=model, target_layer=target_layer)
+    cam = GradCAM(model=model, target_layer=target_layer)
 
     grayscale_cam = cam(input_tensor=input_tensor, method=method)
+    grayscale_cam = grayscale_cam[0,:]
 
     first_image = concatenator.transform_image(image1).numpy()
     first_image = np.moveaxis(first_image, 0, -1)

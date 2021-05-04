@@ -14,7 +14,7 @@ from CreateBox import CreateBox
 from cutandpaste import cutandpaste
 
 
-def test_capandmodel(size='small'):
+def test_cutandpaste(size='small'):
 	parameters_path = os.path.join(os.getcwd(), "parameters")
 	results_path = os.path.join(os.getcwd(), size)
 	results_file = os.path.join(results_path, size + '_results.csv')
@@ -79,4 +79,4 @@ def test_capandmodel(size='small'):
 		
 		
 
-test_capandmodel(size='large')
+test_cutandpaste(size='small')

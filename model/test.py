@@ -8,13 +8,13 @@ import sys
 import time
 import math
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
 from pathlib import Path
 from confusion_matrix import confusion_matrix
-from plot_confusion_matrix import plot_confusion_matrix
-from rocauc import rocauc
+from plot_metrics import plot_metrics
 
 
 
@@ -71,8 +71,6 @@ def test(dataset_size, image_dim, batch_size):
 	        cm = tuple(
 	            map(operator.add, cm, matrix))
 
-	P, y = np.vstack(results), np.hstack(truths)
-
 	correct = round(100*correct/total,3)
 
 	print(f"Accuracy over test set: {correct}%")
@@ -85,8 +83,14 @@ def test(dataset_size, image_dim, batch_size):
 	print(f"False 1s = {cm[3]}, {round(cm[3]*100/total)}%")
 
 	cm = [round(cm[i]*100/total,3) for i in range(4)]
-	plot_confusion_matrix(cm)
+
+	y_true, y_ = np.hstack(truths), np.vstack(results)
+
+	y_score = [max(k) for k in y_]
+
+	plot_metrics(cm, y_true, y_score)
+
 
 	return cm, cm_labels, correct, testing_concatenator.__len__()
 
-test('medium', (150,150), 64)
+test('small', (130,130), 64)
