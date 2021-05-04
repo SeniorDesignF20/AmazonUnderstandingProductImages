@@ -9,7 +9,7 @@ from PIL import Image
 from ast import literal_eval
 from modified_lenet import Modified_LeNet
 from Concatenator import Concatenator
-from pytorch_grad_cam import GradCAM
+from pytorch_grad_cam import GradCAM, ScoreCAM, GradCAMPlusPlus, AblationCAM, XGradCAM, EigenCAM, EigenGradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 from CreateBox import CreateBox
 from invert_map import invert_map
@@ -50,9 +50,9 @@ def test_gradcam(size='small'):
 
 		target_layer = model.layer6
 
-		cam = GradCAM(model=model, target_layer=target_layer)
+		cam = GradCAMPlusPlus(model=model, target_layer=target_layer)
 
-		grayscale_cam = cam(input_tensor=input_tensor)
+		grayscale_cam = cam(input_tensor=input_tensor, aug_smooth=True, eigen_smooth=False)
 		grayscale_cam = grayscale_cam[0,:]
 
 		first_image = concatenator.transform_image(image0).numpy()
