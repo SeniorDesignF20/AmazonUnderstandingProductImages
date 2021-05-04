@@ -88,33 +88,36 @@ class Concatenator(Dataset):
 
         df = pd.read_csv(csvfile)
 
+
         for i in df.index:
 
             print(i)
-
-            name1 = df["image1"][i]
-            image1 = np.array(Image.open(name1))
-            self.first_images_original.append(image1)
-            
-            if df["label"][i] == "same":
-                image2 = image1
-                self.second_images_original.append(image2)
-                self.labels.append(1)
-            else:
-                if binomial(n=1,p=.2):
-                    name2 = df["image2"][i]
-                    image2 = np.array(Image.open(name2))
+            try:
+                name1 = df["image1"][i]
+                image1 = np.array(Image.open(name1))
+                self.first_images_original.append(image1)
+                
+                if df["label"][i] == "same":
+                    image2 = image1
                     self.second_images_original.append(image2)
+                    self.labels.append(1)
                 else:
-                    image2 = cutandpaste(image1)
-                    self.second_images_original.append(image2)
+                    if binomial(n=1,p=.2):
+                        name2 = df["image2"][i]
+                        image2 = np.array(Image.open(name2))
+                        self.second_images_original.append(image2)
+                    else:
+                        image2 = cutandpaste(image1)
+                        self.second_images_original.append(image2)
 
-                self.labels.append(0)
-            transformed1 = self.transform(image1)
-            transformed2 = self.transform(image2)
+                    self.labels.append(0)
+                transformed1 = self.transform(image1)
+                transformed2 = self.transform(image2)
 
-            concatenated = torch.cat((transformed1, transformed2), 0)
+                concatenated = torch.cat((transformed1, transformed2), 0)
 
-            self.first_images.append(transformed1)
-            self.second_images.append(transformed2)
-            self.concatenated_images.append(concatenated)
+                self.first_images.append(transformed1)
+                self.second_images.append(transformed2)
+                self.concatenated_images.append(concatenated)
+            except FileNotFoundError:
+                continue
