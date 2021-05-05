@@ -40,8 +40,9 @@ def gradcam(image1, image2, path, size='small'):
 
     cam = GradCAM(model=model, target_layer=target_layer)
 
-    grayscale_cam = cam(input_tensor=input_tensor, method=method)
-    grayscale_cam = grayscale_cam[0,:]
+    #grayscale_cam = cam(input_tensor=input_tensor, method=method)
+    grayscale_cam = cam(input_tensor=input_tensor)
+    grayscale_cam = grayscale_cam[0, :]
 
     first_image = concatenator.transform_image(image1).numpy()
     first_image = np.moveaxis(first_image, 0, -1)
