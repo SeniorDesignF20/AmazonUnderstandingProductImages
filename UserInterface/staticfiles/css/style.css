@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  font-family: "Helvetica Neue";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #ffffff;
+}
+
+.section-box {
+  border-radius: 3px;
+  border: 1px solid gainsboro;
+  background-color: #fafafa;
+  padding: 25px;
+  box-shadow: 0 0 3px gainsboro;
+
+}
+
+.navbar {
+  background-color: #232F3E;
+}
+
+.error_msg {
+  color: gray;
+  font-style: italic;
+}
+
+/*This is modifying the btn-primary colors but you could create your own .btn-something class as well*/
+.btn-primary {
+  color: #fff;
+  background-color: #232F3E;
+  border-color: #232F3E; 
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #232F3E;
+  border-color: #232F3E; 
+}
+
+.btn-outline-primary {
+  color: #232F3E;
+  border-color: #232F3E;
+}
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #232F3E;
+  border-color: #232F3E;
+}
+.btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
+  box-shadow: 0 0 0 0.25rem #FEBD69;
+}
+.btn-check:checked + .btn-outline-primary, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+  color: #fff;
+  background-color: #232F3E;
+  border-color: #232F3E;
+}
+.btn-check:checked + .btn-outline-primary:focus, .btn-check:active + .btn-outline-primary:focus, .btn-outline-primary:active:focus, .btn-outline-primary.active:focus, .btn-outline-primary.dropdown-toggle.show:focus {
+  box-shadow: 0 0 0 0.25rem #FEBD69;
+}
+.btn-outline-primary:disabled, .btn-outline-primary.disabled {
+  color: #232F3E;
+  background-color: transparent;
+}
+
