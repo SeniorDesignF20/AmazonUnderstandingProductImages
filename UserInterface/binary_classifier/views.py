@@ -40,9 +40,9 @@ def binary_classifier(request):
             request.session['img2_path'] = img.name
            # img2_path = './media/' + request.session['img2_path']
 
-    if request.session.has_key('img1_path'):
+    if request.session.has_key('img1_path') and os.path.isfile(request.session['img1_path']):
         img1_path = './media/' + request.session['img1_path']
-    if request.session.has_key('img2_path'):
+    if request.session.has_key('img2_path') and os.path.isfile(request.session['img2_path']):
         img2_path = './media/' + request.session['img2_path']
 
     if request.method == 'POST' and 'classify' in request.POST:
