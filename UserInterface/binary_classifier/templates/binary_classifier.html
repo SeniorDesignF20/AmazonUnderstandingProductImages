@@ -58,14 +58,14 @@
                             {% endif %}
                         </div>
                             <form method="post">
-                                <div class="mt-5 mb-2 row justify-content-center">
+                                <div class="mt-3 mb-2 row justify-content-center">
                                     {% csrf_token %}
                                     <button type="submit" name="classify" class="btn btn-primary" style="width: 100px;"> Classify
                                     </button>
                                 </div>
                             </form>
                         </div>
-                        <div class="py-3 row text-center"> 
+                        <div class="py-2 row text-center"> 
                             {% if classify_val != 'NaN'%}
                                 <h2> Score: {{classify_val}} </h2>
                             {% else %}
