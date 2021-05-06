@@ -15,6 +15,7 @@ from pathlib import Path
 from confusion_matrix import confusion_matrix
 from plot_confusion_matrix import plot_confusion_matrix
 
+# Saves results in csv file
 def save_results(dataset_size, image_dim, epochs, numsame, numdif, batch_size, 
 	hours, minutes, cm, cm_labels, correct, training_concatenator_length, testing_concatenator_length):
 	curr_path = os.path.dirname(os.path.abspath(__file__))

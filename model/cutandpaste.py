@@ -5,7 +5,8 @@ import os
 import random
 from countPixels import countPixels
 
-
+# Copies a portion of an image and pastes it somewhere else
+# Use countPixels to ensure that the resulting augmented image is sufficiently different than the original
 def cutandpaste(image, boundingBox=False):
     im = np.copy(image)
     ysize, xsize = im.shape[0:2]
@@ -34,6 +35,7 @@ def cutandpaste(image, boundingBox=False):
 
 
 
+    # If you want the cutandpaste image to have rectangles showing where the pasted portion came from and went to
     if boundingBox:
         cv2.rectangle(im,(xrand1, yrand1),(xrand1 + xbox, yrand1 + ybox), [0,255,0], 1)
         cv2.rectangle(im,(xrand2, yrand2),(xrand2 + xbox, yrand2 + ybox), [0,0,255], 1) 

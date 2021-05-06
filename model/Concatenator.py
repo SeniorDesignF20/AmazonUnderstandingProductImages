@@ -30,13 +30,16 @@ class Concatenator(Dataset):
         if csvfile is not None:
             self.load(csvfile)
 
+    # image is a path to image
     def transform_image(self, image):
         image = np.asarray(Image.open(image))
         return self.transform(image)
 
+    # image is a numpy array
     def transform_image2(self, image):
         return self.transform(image)
 
+    # path1 and path2 are paths to image1 and image2
     def concatenate(self, path1, path2):
         image1 = np.asarray(Image.open(path1))
         image2 = np.asarray(Image.open(path2))
@@ -46,6 +49,8 @@ class Concatenator(Dataset):
         transformed2 = self.transform(image2)
 
         return torch.cat((transformed1, transformed2), 0)
+
+    # path is path to image1, image is already a numpy array
     def concatenate2(self, path, image):
         image1 = np.asarray(Image.open(path))
         
@@ -55,18 +60,23 @@ class Concatenator(Dataset):
 
         return torch.cat((transformed1, transformed2), 0)
 
+    # Returns first_images after transformation
     def first_images(self):
         return self.first_images
 
+    # Returns second_images after transformation
     def second_images(self):
         return self.second_images
     
+    # Returns first_images before transformation
     def first_images_original(self):
         return self.first_images_original
 
+    # Returns second_images before transformation
     def second_images_original(self):
         return self.second_images_original
 
+    # Returns concatenated_images after both images were tranformed
     def concatenated_images(self):
         return self.concatenated_images
 
@@ -102,10 +112,12 @@ class Concatenator(Dataset):
                     self.second_images_original.append(image2)
                     self.labels.append(1)
                 else:
+                    # Want 20% of different pairs to be different products in same class
                     if binomial(n=1,p=.2):
                         name2 = df["image2"][i]
                         image2 = np.array(Image.open(name2))
                         self.second_images_original.append(image2)
+                    # Want 80% of different pairs to be cutandpaste version of each other
                     else:
                         image2 = cutandpaste(image1)
                         self.second_images_original.append(image2)
@@ -114,7 +126,10 @@ class Concatenator(Dataset):
                 transformed1 = self.transform(image1)
                 transformed2 = self.transform(image2)
 
-                concatenated = torch.cat((transformed1, transformed2), 0)
+                if binomial(n=1,p=.5):
+                    concatenated = torch.cat((transformed1, transformed2), 0)
+                else:
+                    concatenated = torch.cat((transformed2, transformed1), 0)
 
                 self.first_images.append(transformed1)
                 self.second_images.append(transformed2)

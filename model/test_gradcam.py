@@ -12,9 +12,8 @@ from Concatenator import Concatenator
 from pytorch_grad_cam import GradCAM, ScoreCAM, GradCAMPlusPlus, AblationCAM, XGradCAM, EigenCAM, EigenGradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 from CreateBox import CreateBox
-from invert_map import invert_map
 
-
+# Tests gradcam on image pairs found in Test_GradCAM folder
 def test_gradcam(size='small'):
 	warnings.simplefilter("ignore")
 	
@@ -50,8 +49,10 @@ def test_gradcam(size='small'):
 
 		target_layer = model.layer6
 
+		# Experiment with different CAM models
 		cam = GradCAMPlusPlus(model=model, target_layer=target_layer)
 
+		# Experiment with different smooth settings
 		grayscale_cam = cam(input_tensor=input_tensor, aug_smooth=True, eigen_smooth=False)
 		grayscale_cam = grayscale_cam[0,:]
 

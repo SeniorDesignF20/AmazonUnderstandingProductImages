@@ -27,7 +27,8 @@ print(datasets_path)
  where
 
 dataset_size is 'small', 'medium', or 'large'
-image_dim is dimension of images when inserted into model (assumes square). Examples: 26->(26,26), 64->(64,64), 150->(150,150)
+image_dim is single number representing dimension of images when inserted into model (assumes square). 
+Examples: 26->(26,26), 64->(64,64), 150->(150,150)
 epochs is number of training epochs (default 30)
 numsame is number of same examples across training and testing set (default 2000)
 numdif is number of different examples across training and testing set (default 2000)

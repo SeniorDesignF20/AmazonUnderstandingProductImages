@@ -17,7 +17,7 @@ from confusion_matrix import confusion_matrix
 from plot_metrics import plot_metrics
 
 
-
+# Automatically called in train.py
 def test(dataset_size, image_dim, batch_size):
 	curr_path = os.path.dirname(os.path.abspath(__file__))
 	csv_path = os.path.join(curr_path, dataset_size)

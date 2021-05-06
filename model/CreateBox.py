@@ -49,6 +49,7 @@ def CreateBox(image, heatmap):
 	    box_area = h*w
 	    image_area = heatmap.shape[0]*heatmap.shape[1]
 
+	    # If contour does not cover at least 3% of total area of image, assume it to be noise
 	    if (red > blue) and (red > green) and box_area>.03*image_area:
 	    	cv2.rectangle(image, (x, y), (x + w, y + h), (255,0,0), 2)
 

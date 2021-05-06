@@ -7,6 +7,7 @@ import pandas as pd
 import random
 from ClassSplitter import ClassSplitter
 
+# Finds same and different image pairs from the dataset
 def create_datasets(dataset_path, numsame=2000, numdif=2000, size='small'):
 
 	randDF = pd.DataFrame(columns=['image1', 'image2', 'label'])
@@ -111,6 +112,7 @@ def create_datasets(dataset_path, numsame=2000, numdif=2000, size='small'):
 
 	return randDF
 
+# Splits the images found in create_datasets into training and testing set
 def splitDF(df, destination_path, test_ratio=.25):
 	different_images = df.loc[df['label'] == 'different']
 	same_images = df.loc[df['label'] == 'same']

@@ -13,3 +13,4 @@ six==1.15.0
 torch==1.7.1
 torchvision==0.8.2
 typing-extensions==3.7.4.3
+grad-cam==1.2.7

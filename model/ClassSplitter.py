@@ -1,11 +1,10 @@
+import os
+import random
+
 # Returns a list of classes to be considered.
 # If size == 'small', return 10 random classes
 # If size == 'mediium', return 20 random classes
 # If size == 'large', return all classes
-
-import os
-import random
-
 def ClassSplitter(dataset_path, size='small'):
 
 	classes = []

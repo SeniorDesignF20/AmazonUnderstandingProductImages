@@ -40,7 +40,6 @@ def gradcam(image1, image2, path, size='small'):
 
     cam = GradCAMPlusPlus(model=model, target_layer=target_layer)
 
-    #grayscale_cam = cam(input_tensor=input_tensor, method=method)
     grayscale_cam = cam(input_tensor=input_tensor, aug_smooth=True, eigen_smooth=False)
     grayscale_cam = grayscale_cam[0, :]
 

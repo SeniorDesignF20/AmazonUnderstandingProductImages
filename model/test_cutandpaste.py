@@ -13,7 +13,8 @@ from pytorch_grad_cam.utils.image import show_cam_on_image
 from CreateBox import CreateBox
 from cutandpaste import cutandpaste
 
-
+# Tests gradcam on original and cutandpaste pair
+# Plots original image side-by-side a randomized cutandpaste augmented image and heatmap
 def test_cutandpaste(size='small'):
 	parameters_path = os.path.join(os.getcwd(), "parameters")
 	results_path = os.path.join(os.getcwd(), size)
