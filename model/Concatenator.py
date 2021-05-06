@@ -4,7 +4,6 @@ import torch
 import torchvision.transforms as T
 from torch.utils.data import Dataset
 from PIL import Image
-from warp import warp
 import pandas as pd
 import cv2
 from cutandpaste import cutandpaste
