@@ -1,5 +1,5 @@
 # Honors Senior Design - Fall 2020 to Spring 2021
-# The University of Texas at Austin
+# The University of Texas at Austin at Zoom
 # Electrical and Computer Engineering Dept.
 # Team H19
 
