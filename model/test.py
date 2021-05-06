@@ -93,4 +93,4 @@ def test(dataset_size, image_dim, batch_size):
 
 	return cm, cm_labels, correct, testing_concatenator.__len__()
 
-test('small', (130,130), 64)
+#test('large', (80,80), 64)

@@ -12,13 +12,13 @@ def plot_metrics(cm, y_true, y_score):
 	Recall = round(cm[1]/(cm[1] + cm[2]),3)
 	F1 = round(2*Precision*Recall/(Precision + Recall),3)
 
-	fig, ax = plt.subplots(1,1)
+	"""fig, ax = plt.subplots(1,1)
 	data = [[Precision], [Recall], [F1]]
 	row_labels = ['Precision', 'Recall', 'F1 Score']
 	ax.axis('tight')
 	ax.axis('off')
 	ax.table(cellText=data, rowLabels=row_labels, loc='center', colWidths=[.1,.1])
-	plt.show()
+	plt.show()"""
 
 	_, tpr, _ = roc_curve(y_true, y_score)
 	x = np.linspace(0,1,len(tpr))
