@@ -31,7 +31,7 @@ The demo will run the gradcam model on all image pairs in the Test_GradCAM folde
 
 
 ## UI Demo
-To run the UI, go to the UserInterface folder and run 'python3 manage.py runserver' and in your browser go to localhost (hhtp://128.0.0.1:8000/).
+To run the UI, go to the UserInterface folder and run 'python3 manage.py runserver' and in your browser go to localhost (http://128.0.0.1:8000/).
 
 ## Example
 ![UI1](https://user-images.githubusercontent.com/31623958/117378342-d5cb5000-ae9a-11eb-9f46-2dfa2ab1f4fe.JPG)
