@@ -8,72 +8,8 @@ import shutil
 import classifier
 from imageai.Classification import ImageClassification
 from PIL import Image, ImageOps
+from pathlib import Path
 
-'''
-#load duplicate id's
-# duplicates = []
-# my_file = open("duplicates.txt", "r")
-# duplicates = my_file.readlines()
-
-### load the meta data
-#data = []
-#with open('meta_AMAZON_FASHION.json') as f:
-#    for l in f:
-#        data.append(json.loads(l.strip()))
-
-#df = pd.DataFrame.from_dict(data)
-#df.drop(df.columns.difference(["image", "asin", "title"]), 1, inplace=True)
-
-# for line in duplicates:
-#     ids = line.split()
-#     for id in ids[1:]:
-#         if id in df.asin:
-#             df.drop(df.loc[df['asin']== id].index, inplace=True)
-#             print(len(df))
-
-df = df[df['image'].map(lambda d: len(d)) > 1]
-df = df[df.title.str.contains("glass")]
-print(len(df))
-
-image_list = []
-for index, row in df.head(1000).iterrows():
-    
-    image_list = row['image']
-    asin = row['asin']
-
-    for i in range(len(image_list)):
-        image_url = image_list[i]
-        
-        if 'US40' in image_url:
-            image_url = image_url.replace( 'US40','SR38%2050')
-        if 'SR38,50' in image_url:
-            image_url = image_url.replace( 'SR38,50','SR38%2050')
-        if 'SX38_SY50_CR,0,0,38,50' in image_url:
-            image_url = image_url.replace( 'SX38_SY50_CR,0,0,38,50','SR38%2050')
-       
-        filename = asin + "_" + str(i) + ".jpg"
-        
-        # Check if the image was retrieved successfully
-        try:
-            # Open the url image, set stream to True, this will return the stream content.
-            r = requests.get(image_url, stream = True, timeout=0.1)
-        
-            if r.status_code == 200:
-                # Set decode_content value to True, otherwise the downloaded image file's size will be zero.
-                r.raw.decode_content = True
-                
-                # Open a local file with wb ( write binary ) permission.
-                with open(filename,'wb') as f:
-                    shutil.copyfileobj(r.raw, f)
-                    
-                print('Image sucessfully Downloaded: ',filename)
-            else:
-                print('Image Couldn\'t be retreived')
-        except requests.exceptions.Timeout:
-            pass
-        except: 
-            pass
-'''
 ### Set up image classifier
 predictor = ImageClassification()
 
@@ -83,15 +19,24 @@ predictor.setModelPath(model_path)
 predictor.loadModel()
 
 ### Load preprocessed metadata
-json_path = r"../AmazonSet/preprocessed_meta_Clothing_Shoes_and_Jewelry_20000.json"
+## Empty category
+#json_path = r"../AmazonSet/preProcessed_meta_AMAZON_FASHION.json"
+json_path = r"../AmazonSet/preProcessed_meta_All_Beauty.json"
+
+## Valid category
+#json_path = r"../AmazonSet/preprocessed_meta_Clothing_Shoes_and_Jewelry_20000.json"
 df = pd.read_json(json_path)
 
 print("Finding image products ...")
 
-for index, row in df[13000:15000].iterrows():
+def find_second_last(text, pattern):
+  return text.rfind(pattern, 0, text.rfind(pattern))
+
+for index, row in df[:20000].iterrows():
 
     asin = row["asin"]
     image_list = row["image"]
+    target_row = row["category"]
 
     if image_list == None:
         continue
@@ -125,77 +70,80 @@ for index, row in df[13000:15000].iterrows():
     umbrella_objs = ["Umbrellas", "Folding Umbrellas"]
     accessories_objs = ["Accessories"]
 
-    if any(x in row["category"] for x in backpack_objs): 
+    '''
+    if any(x in target_row for x in backpack_objs): 
         class_path = "./Backpacks"
-    elif any(x in row["category"] for x in hat_objs):
+    elif any(x in target_row for x in hat_objs):
         class_path = "./Hats"
-    #elif any(x in row["category"] for x in shoe_objs):
-    #    class_path = "./Shoes"
-    elif any(x in row["category"] for x in jewelry_objs):
+    elif any(x in target_row for x in shoe_objs):
+        class_path = "./Shoes"
+    elif any(x in target_row for x in jewelry_objs):
         class_path = "./Jewelry"
-    #elif any(x in row["category"] for x in top_objs):
-    #    class_path = "./Shirts"
-    elif any(x in row["category"] for x in blouse_objs):
+    elif any(x in target_row for x in top_objs):
+        class_path = "./Shirts"
+    elif any(x in target_row for x in blouse_objs):
         class_path = "./Blouses"
-    #elif any(x in row["category"] for x in pant_objs):
-    #    class_path = "./Pants"
-    elif any(x in row["category"] for x in watch_objs):
+    elif any(x in target_row for x in pant_objs):
+        class_path = "./Pants"
+    elif any(x in target_row for x in watch_objs):
         class_path = "./Watches"
-    elif any(x in row["category"] for x in jacket_objs):
+    elif any(x in target_row for x in jacket_objs):
         class_path = "./Jackets"
-    elif any(x in row["category"] for x in glove_objs):
+    elif any(x in target_row for x in glove_objs):
         class_path = "./Gloves"
-    elif any(x in row["category"] for x in wallet_objs):
+    elif any(x in target_row for x in wallet_objs):
         class_path = "./Wallets"
-    elif any(x in row["category"] for x in bag_objs):
+    elif any(x in target_row for x in bag_objs):
         class_path = "./Bags"
-    elif any(x in row["category"] for x in luggage_objs):
+    elif any(x in target_row for x in luggage_objs):
         class_path = "./Luggages"
-    elif any(x in row["category"] for x in dress_objs):
+    elif any(x in target_row for x in dress_objs):
         class_path = "./Dresses"
-    elif any(x in row["category"] for x in sock_objs):
+    elif any(x in target_row for x in sock_objs):
         class_path = "./Socks"
-    elif any(x in row["category"] for x in scarves_objs):
+    elif any(x in target_row for x in scarves_objs):
         class_path = "./Scarves"
-    elif any(x in row["category"] for x in sweater_objs):
+    elif any(x in target_row for x in sweater_objs):
         class_path = "./Sweaters"
-    elif any(x in row["category"] for x in shorts_objs):
+    elif any(x in target_row for x in shorts_objs):
         class_path = "./Shorts"
-    elif any(x in row["category"] for x in glasses_objs):
+    elif any(x in target_row for x in glasses_objs):
         class_path = "./Glasses"
-    elif any(x in row["category"] for x in suits_objs):
+    elif any(x in target_row for x in suits_objs):
         class_path = "./Suits"
-    elif any(x in row["category"] for x in sleepwear_objs):
+    elif any(x in target_row for x in sleepwear_objs):
         class_path = "./Sleepwear"
-    elif any(x in row["category"] for x in underwear_objs):
+    elif any(x in target_row for x in underwear_objs):
         class_path = "./Underwear"
-    elif any(x in row["category"] for x in neckties_objs):
+    elif any(x in target_row for x in neckties_objs):
         class_path = "./Neckties"
-    elif any(x in row["category"] for x in belt_objs):
+    elif any(x in target_row for x in belt_objs):
         class_path = "./Belts"
-    elif any(x in row["category"] for x in jean_objs):
+    elif any(x in target_row for x in jean_objs):
         class_path = "./Jeans"
-    elif any(x in row["category"] for x in umbrella_objs):
+    elif any(x in target_row for x in umbrella_objs):
         class_path = "./Umbrellas"   
-    elif any(x in row["category"] for x in accessories_objs):
+    elif any(x in target_row for x in accessories_objs):
         class_path = "./Accessories" 
     else:
         print(index, "Category not found.", row["category"])
         continue
+    '''
+    
+    class_path = "./new_downloads"
 
     for i in range(len(image_list)):
 
         image_url = image_list[i]
         
-        if 'US40' in image_url:
-            image_url = image_url.replace( 'US40','SR38%2050')
-        if 'SR38,50' in image_url:
-            image_url = image_url.replace( 'SR38,50','SR38%2050')
-        if 'SX38_SY50_CR,0,0,38,50' in image_url:
-            image_url = image_url.replace( 'SX38_SY50_CR,0,0,38,50','SR38%2050')
-    
+        image_url = image_url[:find_second_last(image_url, '.')]+'.jpg'
+        image_url = image_url.replace('"', '')
+        image_url = image_url.replace('[', '')
+        image_url = image_url.replace(' ', '')
+
         filename = asin + "_" + str(i) + ".jpg"
         output_path = os.path.join(class_path, filename)
+        Path(class_path).mkdir(parents=True, exist_ok=True)
         
         # Check if the image was retrieved successfully
         try:
@@ -207,5 +155,3 @@ for index, row in df[13000:15000].iterrows():
 
         except:
             pass
-
-
