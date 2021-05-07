@@ -17,6 +17,9 @@ Mentors:
 # Amazon - Understanding Product Images
 Given the large size of Amazon’s catalog, there are many products that look very similar but contain small yet important differences that can only be found upon close inspection. A model that only analyzes trivial pixel-level differences would be inadequate, considering the variety of images that could be encountered. Thus, we developed a robust object detection model that detects big picture differences in product image pairs, if they exist. Utilizing a convolution neural network followed by GradCAM, our model determines if there are differences across images and places bounding boxes around the areas of difference for visualization. Additionally, we built a web-based UI that allows for humans to seamlessly use the model to analyze their own pictures.
 
+# Video Summary
+https://drive.google.com/file/d/1HgktZUP_8l1RhqiK8rc1hf2M_fw8_Aku/view?usp=sharing
+
 # Inspiration
 Project was largely inspired by J. Wu, Y. Ye, Y. Che, and Z. Weng. Spot the Difference by Object Detection. 2018. https://arxiv.org/abs/1801.01051v1.
 
